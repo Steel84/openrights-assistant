@@ -1,52 +1,97 @@
-const state = { chunks: [], idf: {} };
-const words = (text) => (text.toLowerCase().match(/[a-z0-9][a-z0-9'-]{1,}/g) || []);
+const state = { chunks: [], idf: {}, ready: false };
+const TOKEN = /[a-z0-9][a-z0-9'-]{1,}/g;
 
-function score(question, chunk) {
-  const query = words(question);
+const words = (text) => text.toLowerCase().match(TOKEN) || [];
+
+function vector(text, idf) {
   const counts = Object.create(null);
-  words(chunk.text).forEach((word) => { counts[word] = (counts[word] || 0) + 1; });
-  const length = words(chunk.text).length || 1;
-  let value = 0;
-  query.forEach((word) => { value += ((counts[word] || 0) / length) * (state.idf[word] || 1); });
-  return value;
+  const tokens = words(text);
+  tokens.forEach((word) => { counts[word] = (counts[word] || 0) + 1; });
+  const length = tokens.length || 1;
+  const result = Object.create(null);
+  for (const word in counts) {
+    if (idf[word] !== undefined) result[word] = (counts[word] / length) * idf[word];
+  }
+  return result;
+}
+
+function norm(vec) {
+  let total = 0;
+  for (const word in vec) total += vec[word] * vec[word];
+  return Math.sqrt(total) || 1;
+}
+
+// Same cosine ranking as the Python CLI, so phone results match `openrights ask`.
+function search(question, topK) {
+  const query = vector(question, state.idf);
+  const queryNorm = norm(query);
+  return state.chunks
+    .map((chunk) => {
+      let dot = 0;
+      for (const word in query) {
+        const value = chunk.vector[word];
+        if (value !== undefined) dot += query[word] * value;
+      }
+      return { chunk, score: dot / (queryNorm * chunk.norm) };
+    })
+    .sort((a, b) => b.score - a.score)
+    .slice(0, topK);
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
 }
 
 function showResults(question) {
-  const results = state.chunks.map((chunk) => ({ ...chunk, score: score(question, chunk) }))
-    .sort((a, b) => b.score - a.score).slice(0, 5);
   const container = document.querySelector("#results");
-  container.innerHTML = `<div class="empty">${results.length ? `Showing ${results.length} source passages for “${escapeHtml(question)}”.` : "No matching passage found."}</div>`;
-  results.forEach((result, index) => {
+  if (!state.ready) return;
+  if (!question) {
+    container.innerHTML = '<div class="empty">Type a question to search the local archive.</div>';
+    return;
+  }
+  const hits = search(question, 5).filter((hit) => hit.score > 0);
+  container.innerHTML = `<div class="empty">${hits.length ? `Showing ${hits.length} source passages for “${escapeHtml(question)}”.` : "No matching passage in this archive. Try different words."}</div>`;
+  hits.forEach((hit, index) => {
     const card = document.createElement("article");
     card.className = "result";
-    card.innerHTML = `<div class="resulthead"><span>[${index + 1}] ${escapeHtml(result.source)}</span><span class="score">${result.score.toFixed(3)}</span></div><p>${escapeHtml(result.text)}</p><a href="${result.url}" target="_blank" rel="noreferrer">Open source ↗</a>`;
+    card.innerHTML = `<div class="resulthead"><span>[${index + 1}] ${escapeHtml(hit.chunk.source)}</span><span class="score">${hit.score.toFixed(3)}</span></div><p>${escapeHtml(hit.chunk.text)}</p><a href="${escapeHtml(hit.chunk.url)}" target="_blank" rel="noreferrer">Open source ↗</a>`;
     container.appendChild(card);
   });
 }
 
-function escapeHtml(value) { return value.replace(/[&<>"']/g, (char) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;", "'":"&#039;" }[char])); }
-
-async function init() {
-  try {
-    const response = await fetch("./data/index.json");
-    const payload = await response.json();
-    state.chunks = payload.chunks || [];
-    state.idf = payload.idf || {};
-    document.querySelector("#chunkCount").textContent = state.chunks.length;
-    document.querySelector("#statusText").textContent = "Ready · on this device";
-  } catch (error) {
-    document.querySelector("#statusText").textContent = "Archive unavailable";
-    document.querySelector("#results").innerHTML = '<div class="empty">Run the export step before opening this app.</div>';
+function init() {
+  const payload = window.OPENRIGHTS_INDEX;
+  const statusText = document.querySelector("#statusText");
+  if (!payload || !payload.chunks || !payload.chunks.length) {
+    statusText.textContent = "Archive missing";
+    document.querySelector("#results").innerHTML = '<div class="empty">The local archive did not load. Run <code>python -m openrights ingest &amp;&amp; python -m openrights export-web</code>, then reopen this page.</div>';
+    return;
   }
+  state.idf = payload.idf || {};
+  state.chunks = payload.chunks.map((chunk) => {
+    const vec = vector(chunk.text, state.idf);
+    return { ...chunk, vector: vec, norm: norm(vec) };
+  });
+  state.ready = true;
+  document.querySelector("#chunkCount").textContent = state.chunks.length;
+  statusText.textContent = "Ready · on this device";
+  document.querySelector("#results").innerHTML = '<div class="empty">Ask a question or pick an example below the search box.</div>';
 }
 
 document.querySelector("#searchForm").addEventListener("submit", (event) => {
   event.preventDefault();
   showResults(document.querySelector("#question").value.trim());
 });
+
 document.querySelectorAll("[data-question]").forEach((button) => button.addEventListener("click", () => {
   document.querySelector("#question").value = button.dataset.question;
   showResults(button.dataset.question);
 }));
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("./service-worker.js");
+
+// A service worker needs an http(s) origin; the APK runs from file:// and does
+// not need one, because its assets are already on the device.
+if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+  navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+}
+
 init();

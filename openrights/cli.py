@@ -8,6 +8,8 @@ from .ingest import ingest
 from .generator import build_prompt, generate
 from .benchmark import run as run_benchmark, save as save_benchmark
 from .rag import TfidfIndex
+from .serve import serve
+from .bundle import build as build_bundle
 from .web import export_web
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -49,6 +51,9 @@ def main() -> None:
     subparsers.add_parser("evaluate")
     subparsers.add_parser("export-web")
     subparsers.add_parser("benchmark")
+    subparsers.add_parser("bundle")
+    serve_parser = subparsers.add_parser("serve")
+    serve_parser.add_argument("--port", type=int, default=8000)
     ask_parser = subparsers.add_parser("ask")
     ask_parser.add_argument("question")
     ask_parser.add_argument("--top-k", type=int, default=5)
@@ -59,7 +64,13 @@ def main() -> None:
     elif args.command == "evaluate":
         evaluate()
     elif args.command == "export-web":
-        print(f"Exported {export_web(ROOT)} chunks to app/data/index.json.")
+        chunks, size = export_web(ROOT)
+        print(f"Exported {chunks} chunks to app/data/index.js ({size / 1024:.0f} KB).")
+    elif args.command == "bundle":
+        target, size = build_bundle(ROOT)
+        print(f"Wrote {target.relative_to(ROOT)} ({size / 1024:.0f} KB). Open it in any browser, online or offline.")
+    elif args.command == "serve":
+        serve(ROOT, args.port)
     elif args.command == "benchmark":
         result = run_benchmark(ROOT)
         save_benchmark(ROOT, result)

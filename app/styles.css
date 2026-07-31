@@ -29,4 +29,4 @@ button { cursor:pointer; border:0; }
 .result p { margin:0; font:17px/1.5 Georgia,serif; color:#29453f; }
 .result a { display:inline-block; margin-top:14px; color:var(--accent); font:12px Arial,sans-serif; text-decoration:none; overflow-wrap:anywhere; }
 footer { margin-top:auto; padding:20px 0 26px; display:flex; justify-content:space-between; gap:15px; color:var(--muted); font:11px Arial,sans-serif; border-top:1px solid var(--line); }
-@media (max-width:600px) { .topbar { padding-top:20px; } .status { font-size:0; } .inputrow { display:block; } .inputrow button { width:100%; margin-top:15px; padding:14px; } .searchbox { box-shadow:5px 5px 0 #e4dfd3; } footer { display:block; } footer span { display:block; margin-top:5px; } }
+@media (max-width:600px) { .topbar { padding-top:20px; flex-direction:column; align-items:flex-start; gap:14px; } .status { padding-top:0; } .inputrow { display:block; } .inputrow button { width:100%; margin-top:15px; padding:14px; } .searchbox { box-shadow:5px 5px 0 #e4dfd3; } footer { display:block; } footer span { display:block; margin-top:5px; } }

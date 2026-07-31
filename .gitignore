@@ -8,3 +8,4 @@ models/*.gguf
 benchmarks/latest.json
 android/app/src/main/assets/
 android/app/build/
+dist/
