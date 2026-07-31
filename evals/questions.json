@@ -1,6 +1,15 @@
 [
   {"question": "What is the federal minimum wage?", "expected_source": "Fair Labor Standards Act"},
   {"question": "How is overtime compensation calculated?", "expected_source": "Fair Labor Standards Act"},
+  {"question": "How many hours trigger federal overtime rules?", "expected_source": "Fair Labor Standards Act"},
+  {"question": "Can state law set a higher minimum wage?", "expected_source": "Fair Labor Standards Act"},
+  {"question": "Does the law address equal pay for equal work?", "expected_source": "Fair Labor Standards Act"},
+  {"question": "What can I do if I clicked a phishing link?", "expected_source": "Phishing"},
   {"question": "How do I recognize a phishing scam?", "expected_source": "Phishing"},
+  {"question": "How should I report a phishing message?", "expected_source": "Phishing"},
+  {"question": "Why use multi-factor authentication against phishing?", "expected_source": "Phishing"},
   {"question": "What makes an advertisement deceptive?", "expected_source": "Advertising and Marketing"}
+  ,{"question": "Must advertising claims be truthful?", "expected_source": "Advertising and Marketing"},
+  {"question": "What evidence should support an advertising claim?", "expected_source": "Advertising and Marketing"},
+  {"question": "Do consumer protection rules apply to online advertising?", "expected_source": "Advertising and Marketing"}
 ]

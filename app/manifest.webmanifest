@@ -1,0 +1,10 @@
+{
+  "name": "OpenRights Assistant",
+  "short_name": "OpenRights",
+  "description": "Offline source-based legal information assistant",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f0e8",
+  "theme_color": "#173b36",
+  "icons": []
+}

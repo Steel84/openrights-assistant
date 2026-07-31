@@ -7,6 +7,7 @@ from pathlib import Path
 from .ingest import ingest
 from .generator import build_prompt, generate
 from .rag import TfidfIndex
+from .web import export_web
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -45,6 +46,7 @@ def main() -> None:
     subparsers = parser.add_subparsers(dest="command", required=True)
     subparsers.add_parser("ingest")
     subparsers.add_parser("evaluate")
+    subparsers.add_parser("export-web")
     ask_parser = subparsers.add_parser("ask")
     ask_parser.add_argument("question")
     ask_parser.add_argument("--top-k", type=int, default=5)
@@ -54,6 +56,8 @@ def main() -> None:
         print(f"Indexed {ingest(ROOT)} chunks.")
     elif args.command == "evaluate":
         evaluate()
+    elif args.command == "export-web":
+        print(f"Exported {export_web(ROOT)} chunks to app/data/index.json.")
     elif args.command == "ask":
         ask(args.question, args.top_k, args.model)
 

@@ -24,6 +24,10 @@ python -m openrights ask --model models/model.gguf "What is overtime pay?"
 
 The current index is a dependency-light TF-IDF index. It is deliberately boring and deterministic so that the first MVP can be evaluated on a laptop before adding sentence embeddings or a quantized LLM.
 
+## Mobile demo
+
+The `app/` directory is a dependency-free responsive PWA. Run `python -m openrights export-web`, serve the repository over HTTPS, and open `/app/` on a phone. After the first load, the service worker caches the interface and local index. The search itself makes no network request. See `GRANT_READINESS.md` for the honest status of each grant requirement.
+
 ## Commands
 
 ```bash
@@ -31,6 +35,7 @@ python -m openrights ingest              # download and index official sources
 python -m openrights ask "..."           # retrieve cited passages
 python -m openrights ask --top-k 8 "..."
 python -m openrights evaluate             # run the small smoke-test set
+python -m openrights export-web           # build the self-contained mobile web index
 ```
 
 The optional `--model` path expects a GGUF model and a `llama-cli` executable on `PATH`. Without it, the application remains fully usable as a cited retrieval tool.
@@ -56,4 +61,4 @@ This is an experimental information-retrieval tool, not a lawyer, and not a subs
 
 ## Current status
 
-The repository contains a working retrieval MVP and a four-question evaluation set. The local generation layer is implemented but intentionally optional until a model is selected and tested on the target phone.
+The repository contains a working retrieval MVP and a twelve-question evaluation set. The local generation layer is implemented but intentionally optional until a model is selected and tested on the target phone. See `GRANT_READINESS.md` and `GRANT_DRAFT.md` for the current grant position.
