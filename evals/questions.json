@@ -1,0 +1,6 @@
+[
+  {"question": "What is the federal minimum wage?", "expected_source": "Fair Labor Standards Act"},
+  {"question": "How is overtime compensation calculated?", "expected_source": "Fair Labor Standards Act"},
+  {"question": "How do I recognize a phishing scam?", "expected_source": "Phishing"},
+  {"question": "What makes an advertisement deceptive?", "expected_source": "Advertising and Marketing"}
+]

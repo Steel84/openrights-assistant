@@ -19,6 +19,7 @@ source .venv/bin/activate
 python -m pip install -e .
 python -m openrights ingest
 python -m openrights ask "What is the federal minimum wage?"
+python -m openrights ask --model models/model.gguf "What is overtime pay?"
 ```
 
 The current index is a dependency-light TF-IDF index. It is deliberately boring and deterministic so that the first MVP can be evaluated on a laptop before adding sentence embeddings or a quantized LLM.
@@ -31,6 +32,8 @@ python -m openrights ask "..."           # retrieve cited passages
 python -m openrights ask --top-k 8 "..."
 python -m openrights evaluate             # run the small smoke-test set
 ```
+
+The optional `--model` path expects a GGUF model and a `llama-cli` executable on `PATH`. Without it, the application remains fully usable as a cited retrieval tool.
 
 The generated files under `data/raw/` and `data/processed/` are ignored by Git. Re-run `ingest` to recreate them.
 
@@ -50,3 +53,7 @@ This is an experimental information-retrieval tool, not a lawyer, and not a subs
 3. Add llama.cpp-compatible quantized generation with a strict citation prompt.
 4. Package the same pipeline behind a minimal mobile UI.
 5. Publish a transparent evaluation set and limitations before submitting the grant application.
+
+## Current status
+
+The repository contains a working retrieval MVP and a four-question evaluation set. The local generation layer is implemented but intentionally optional until a model is selected and tested on the target phone.
