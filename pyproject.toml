@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openrights-assistant"
+version = "0.1.0"
+description = "Offline-first retrieval assistant for public legal and consumer sources"
+requires-python = ">=3.10"
+
+[project.scripts]
+openrights = "openrights.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["openrights*"]

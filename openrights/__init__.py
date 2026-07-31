@@ -1,0 +1,1 @@
+"""OpenRights Assistant package."""
