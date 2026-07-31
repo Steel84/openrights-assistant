@@ -6,6 +6,7 @@ from pathlib import Path
 
 from .ingest import ingest
 from .generator import build_prompt, generate
+from .benchmark import run as run_benchmark, save as save_benchmark
 from .rag import TfidfIndex
 from .web import export_web
 
@@ -47,6 +48,7 @@ def main() -> None:
     subparsers.add_parser("ingest")
     subparsers.add_parser("evaluate")
     subparsers.add_parser("export-web")
+    subparsers.add_parser("benchmark")
     ask_parser = subparsers.add_parser("ask")
     ask_parser.add_argument("question")
     ask_parser.add_argument("--top-k", type=int, default=5)
@@ -58,6 +60,10 @@ def main() -> None:
         evaluate()
     elif args.command == "export-web":
         print(f"Exported {export_web(ROOT)} chunks to app/data/index.json.")
+    elif args.command == "benchmark":
+        result = run_benchmark(ROOT)
+        save_benchmark(ROOT, result)
+        print(json.dumps(result, indent=2))
     elif args.command == "ask":
         ask(args.question, args.top_k, args.model)
 

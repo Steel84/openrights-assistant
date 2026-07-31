@@ -36,9 +36,12 @@ python -m openrights ask "..."           # retrieve cited passages
 python -m openrights ask --top-k 8 "..."
 python -m openrights evaluate             # run the small smoke-test set
 python -m openrights export-web           # build the self-contained mobile web index
+python -m openrights benchmark            # measure retrieval latency and RSS
 ```
 
 The optional `--model` path expects a GGUF model and a `llama-cli` executable on `PATH`. Without it, the application remains fully usable as a cited retrieval tool.
+
+For an Android debug APK, install Android SDK/Gradle, set `ANDROID_HOME`, then run `scripts/build_android.sh`. The script copies the same offline app into a native WebView shell; no network permission is requested.
 
 The generated files under `data/raw/` and `data/processed/` are ignored by Git. Re-run `ingest` to recreate them.
 

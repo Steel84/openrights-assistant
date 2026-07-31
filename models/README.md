@@ -9,6 +9,8 @@ Recommended first experiment:
 - runtime: `llama.cpp` / `llama-cli`;
 - target budget: 1-2 GB storage, 2-3 GB working memory, short answers capped at 256 tokens.
 
+The first local artifact used for integration testing is `qwen2.5-1.5b-instruct-q2_k.gguf` from the official Qwen GGUF repository. Its download size is approximately 719 MB. It is not committed here; use the download script and review the upstream license.
+
 After downloading a model to this directory, run:
 
 ```bash
