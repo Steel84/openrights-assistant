@@ -30,7 +30,7 @@ Source: https://www.govinfo.gov/content/pkg/USCODE-2023-title29/...
 - **Zero dependencies** beyond Python standard library
 - **8 official sources**: labor law, consumer protection, workplace safety, discrimination, finance
 - **44 plain-language answers** across wages, dismissal, leave, safety, debt, and discrimination
-- **32 retrieval checks and 39 coverage checks**, run on every commit
+- **32 retrieval checks, 44 answer checks, and 10 must-decline checks**, run on every commit
 - **Mobile-ready**: PWA with service worker + Android WebView APK
 - **< 4ms** average query latency
 - **< 500 KB** phone archive size
