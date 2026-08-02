@@ -52,5 +52,11 @@
     "title": "National Labor Relations Act - U.S. Code Title 29, Chapter 7",
     "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title29/html/USCODE-2023-title29-chap7.htm",
     "jurisdiction": "US"
+  },
+  {
+    "id": "fha-uscode",
+    "title": "Fair Housing Act - U.S. Code Title 42, Chapter 45",
+    "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title42/html/USCODE-2023-title42-chap45-subchapI.htm",
+    "jurisdiction": "US"
   }
 ]

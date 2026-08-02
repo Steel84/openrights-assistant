@@ -1,0 +1,65 @@
+{
+  "updated": "2026-08-02T17:28:09+00:00",
+  "sources": {
+    "flsa-uscode": {
+      "title": "Fair Labor Standards Act - U.S. Code Title 29, Chapter 8",
+      "fingerprint": "5b04954fbcfcedb7",
+      "checked": "2026-08-02T17:28:09+00:00",
+      "verified": "2026-08-02T17:28:09+00:00"
+    },
+    "fmla-uscode": {
+      "title": "Family and Medical Leave Act - U.S. Code Title 29, Chapter 28",
+      "fingerprint": "ae2f4f3885426a02",
+      "checked": "2026-08-02T17:28:09+00:00",
+      "verified": "2026-08-02T17:28:09+00:00"
+    },
+    "osha-uscode": {
+      "title": "Occupational Safety and Health Act - U.S. Code Title 29, Chapter 15",
+      "fingerprint": "0c72f2ab81a67c32",
+      "checked": "2026-08-02T17:28:09+00:00",
+      "verified": "2026-08-02T17:28:09+00:00"
+    },
+    "fdcpa-uscode": {
+      "title": "Fair Debt Collection Practices Act - U.S. Code Title 15, Chapter 41, Subchapter V",
+      "fingerprint": "38f2a36776fcd76e",
+      "checked": "2026-08-02T17:28:09+00:00",
+      "verified": "2026-08-02T17:28:09+00:00"
+    },
+    "title7-civilrights": {
+      "title": "Civil Rights Act Title VII - Employment Discrimination (U.S. Code Title 42, Chapter 21, Subchapter VI)",
+      "fingerprint": "78f441b887bb4dda",
+      "checked": "2026-08-02T17:28:09+00:00",
+      "verified": "2026-08-02T17:28:09+00:00"
+    },
+    "tila-uscode": {
+      "title": "Truth in Lending Act - U.S. Code Title 15, Chapter 41, Subchapter I",
+      "fingerprint": "9bdef10ddea9922f",
+      "checked": "2026-08-02T17:28:09+00:00",
+      "verified": "2026-08-02T17:28:09+00:00"
+    },
+    "ftc-phishing": {
+      "title": "How To Recognize and Avoid Phishing Scams",
+      "fingerprint": "82bad3dbe21ccfa7",
+      "checked": "2026-08-02T17:28:09+00:00",
+      "verified": "2026-08-02T17:28:09+00:00"
+    },
+    "ftc-advertising": {
+      "title": "Advertising and Marketing Basics",
+      "fingerprint": "ba32bfd144406116",
+      "checked": "2026-08-02T17:28:09+00:00",
+      "verified": "2026-08-02T17:28:09+00:00"
+    },
+    "nlra-uscode": {
+      "title": "National Labor Relations Act - U.S. Code Title 29, Chapter 7",
+      "fingerprint": "8e06a64b262654f2",
+      "checked": "2026-08-02T17:28:09+00:00",
+      "verified": "2026-08-02T17:28:09+00:00"
+    },
+    "fha-uscode": {
+      "title": "Fair Housing Act - U.S. Code Title 42, Chapter 45",
+      "fingerprint": "b5925cc5517eab27",
+      "checked": "2026-08-02T17:28:09+00:00",
+      "verified": "2026-08-02T17:28:09+00:00"
+    }
+  }
+}

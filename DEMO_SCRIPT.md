@@ -35,12 +35,17 @@ that fit on one screen:
 
 Good alternatives if one falls flat: *Do part-time workers have the same rights
 as full-time workers?* · *Can I refuse dangerous work?* · *Am I entitled to a
-lunch break?* · *How much family and medical leave can I take?*
+lunch break?* · *Can a landlord refuse to rent to me because I have children?*
 
-**Do not ask on camera:** housing, eviction, credit reports, unemployment
-benefits, immigration, small claims. No plain-language answer covers those yet,
-so the app correctly says so and shows statute text instead. Honest, but not
-what you want in a 60 second demo. `docs/COVERAGE.md` has the full gap list.
+One worth considering as a fourth: **Can my landlord raise the rent?** The
+answer is that federal law does not govern rent, that this is state law, and
+where to go instead. It demonstrates the tool refusing to invent a rule, which
+is the harder thing to build and the easier thing to trust.
+
+**Do not ask on camera:** unemployment benefits, bankruptcy, immigration,
+small claims, divorce. No plain-language answer covers those, so the app
+correctly says so and shows statute text instead. Honest, but not what you want
+in a 60 second demo. `docs/COVERAGE.md` has the full gap list.
 
 ## Sequence
 
@@ -60,7 +65,7 @@ what you want in a 60 second demo. `docs/COVERAGE.md` has the full gap list.
 - Under 2 MB. Runs on a phone nobody would call new.
 - No account, no permissions, no network calls after install.
 - Every answer names the statute and links to it.
-- 9 official sources, 50 plain-language answers, checked on every commit.
+- 10 official sources, 59 plain-language answers, checked on every commit.
 
 ## Tips
 

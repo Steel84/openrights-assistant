@@ -16,7 +16,7 @@ question, it says so rather than presenting an excerpt as if it were an answer.
 
 ## What is covered today
 
-50 plain-language answers across eight topics:
+59 plain-language answers across nine topics:
 
 | Topic | Answers | Covers |
 | --- | --- | --- |
@@ -27,9 +27,10 @@ question, it says so rather than presenting an excerpt as if it were an answer.
 | Debt collection | 6 | Contact rules, stopping contact, harassment, false statements, required notice, disputes |
 | Workplace discrimination | 5 | Protected characteristics, harassment, retaliation, accommodation, filing a charge |
 | Talking about pay and organising | 4 | Pay secrecy rules, union rights, concerted activity, complaining about conditions |
+| Housing and tenancy | 9 | Rental discrimination, familial status, disability accommodation, eviction, rent, repairs, deposits |
 | Credit reports | 5 | Reading your report, disputing errors, how long items stay, who may look, adverse action |
 
-Statute text is indexed for all nine sources listed in `data/sources.json`,
+Statute text is indexed for all ten sources listed in `data/sources.json`,
 including two with no plain-language layer yet: the Truth in Lending Act and
 FTC advertising guidance.
 
@@ -38,7 +39,6 @@ FTC advertising guidance.
 A question outside the topics above will fall through to statute text. The
 largest gaps, in rough order of how often people hit them:
 
-- Housing, tenancy, and eviction
 - Consumer purchases, refunds, and warranties
 - Unemployment benefits
 - Wage garnishment
@@ -47,7 +47,7 @@ largest gaps, in rough order of how often people hit them:
 - Small claims procedure
 - Family law
 
-`python -m openrights coverage` checks both halves: that 43 questions reach the
+`python -m openrights coverage` checks both halves: that 50 questions reach the
 right answer, and that 10 questions from the gap list above are **declined**
 rather than answered.
 
@@ -98,6 +98,25 @@ python -m openrights evaluate
 python -m openrights export-web
 ```
 
+## Where federal law runs out
+
+Housing exposed a limit that is not about this tool's coverage but about
+which government writes the rule.
+
+Federal law governs housing **discrimination** and essentially nothing else.
+Eviction procedure, rent increases, security deposits, and habitability are
+state and local law, and they differ substantially between states.
+
+So the housing answers do two different things. Where a federal rule exists,
+they state it. Where none does, they say so plainly, describe the general
+shape of the state rule, and point at legal aid or the court self-help desk.
+That is the true answer to "can my landlord raise the rent", and it is more
+use than silence: the reader learns which government to ask.
+
+The same limit will apply to consumer purchases, unemployment, and family
+law, which are also mostly state matters. A state layer is a separate
+corpus, not a few more answers.
+
 ## What the guards do not fix
 
 The guards decide whether to give an *answer*. The statute passages shown
@@ -115,9 +134,25 @@ filtering on a number that does not mean anything. Closing this needs a real
 relevance signal, not a tuned constant: sentence embeddings are the obvious
 candidate and are out of scope for the first release.
 
+## Keeping answers current
+
+A hand-written summary is correct the day it is written and decays silently
+after that. The answer still reads well and still cites a real source;
+nothing in the repository shows the drift.
+
+`python -m openrights freshness` fingerprints the cleaned text of every
+source and compares it against `data/freshness.json`. When a source moves,
+it names every answer resting on that statute. A GitHub Action runs it
+weekly and opens an issue listing them.
+
+The hash is taken over cleaned text, not raw HTML: government pages
+regenerate constantly with unchanged content, and a monitor that cries wolf
+is one people stop reading. After re-reading the flagged answers,
+`--accept` records the new text as reviewed. Nothing marks itself fresh.
+
 ## Scaling this
 
-Writing 50 answers took a few hours. The work is legal summarisation, not
+Writing 59 answers took a few hours. The work is legal summarisation, not
 engineering, and it is the part that decides whether the tool helps anyone.
 
 This is deliberate for the first release: hand-written answers are auditable,

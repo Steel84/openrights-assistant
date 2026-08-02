@@ -7,7 +7,7 @@
 
 OpenRights Assistant is an offline-first, open-source application that helps people understand their legal rights by searching official public law on their phone, with no internet connection, no account, and no server cost. It retrieves exact passages from government sources and shows where each answer comes from, so users can verify the information themselves.
 
-The prototype is live, tested, and open: 9 official U.S. legal sources, 1,280+ indexed passages, 50 plain-language answers, 85 automated checks, a working mobile interface, and a clear path to multi-jurisdiction expansion.
+The prototype is live, tested, and open: 10 official U.S. legal sources, 1,390+ indexed passages, 59 plain-language answers, 105 automated checks, a working mobile interface, and a clear path to multi-jurisdiction expansion.
 
 ---
 
@@ -54,7 +54,7 @@ These barriers are highest in communities where connectivity is intermittent and
 User question
     ||
     vv
-[TF-IDF Retrieval] - searches 1,280+ passages from 9 official sources
+[TF-IDF Retrieval] - searches 1,390+ passages from 10 official sources
     ||
     vv
 [Ranked results with citations and source URLs]
@@ -109,7 +109,7 @@ User question
 ## Roadmap
 
 ### Phase 1: Foundation (COMPLETE)
-- [x] Offline retrieval pipeline with 9 official sources
+- [x] Offline retrieval pipeline with 10 official sources
 - [x] Mobile PWA with service worker caching
 - [x] Android WebView packaging
 - [x] 32-question evaluation set (100% pass rate)

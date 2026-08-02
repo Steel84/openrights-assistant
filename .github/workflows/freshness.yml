@@ -1,0 +1,72 @@
+# A hand-written summary of a statute decays silently: it still reads well and
+# still cites a real source long after the law moved. Nothing in the repository
+# would show it, so check every week and open an issue naming the answers that
+# need re-reading.
+name: Law freshness
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+
+      - name: Compare sources against recorded fingerprints
+        id: check
+        run: |
+          set +e
+          python -m openrights freshness > freshness.txt 2>&1
+          echo "status=$?" >> "$GITHUB_OUTPUT"
+          cat freshness.txt
+
+      # Exit 2 means a source changed and answers need review. Exit 1 means a
+      # source was unreachable, which is worth knowing but is not a change.
+      - name: Open a review issue
+        if: steps.check.outputs.status == '2'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('freshness.txt', 'utf8');
+            const title = 'Law changed: answers need review';
+            const open = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'freshness',
+            });
+            const existing = open.data.find(i => i.title === title);
+            const text = '```\n' + body + '```';
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body: text,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                labels: ['freshness'],
+                body: text,
+              });
+            }
+
+      - name: Report an unreachable source
+        if: steps.check.outputs.status == '1'
+        run: |
+          echo "::warning::A source could not be fetched. Fingerprints kept; nothing marked fresh."

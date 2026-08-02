@@ -7,6 +7,7 @@ from pathlib import Path
 from .ingest import ingest
 from .generator import build_prompt, generate
 from .benchmark import run as run_benchmark, save as save_benchmark
+from .freshness import check as check_freshness, report as report_freshness
 from .rag import TfidfIndex, is_on_subject, EVIDENCE_TERMS
 from .serve import serve
 from .bundle import build as build_bundle
@@ -164,6 +165,12 @@ def main() -> None:
     subparsers.add_parser("coverage")
     subparsers.add_parser("export-web")
     subparsers.add_parser("benchmark")
+    freshness_parser = subparsers.add_parser("freshness")
+    freshness_parser.add_argument(
+        "--accept",
+        action="store_true",
+        help="Record the current text as reviewed. Only after re-reading the answers.",
+    )
     subparsers.add_parser("bundle")
     serve_parser = subparsers.add_parser("serve")
     serve_parser.add_argument("--port", type=int, default=8000)
@@ -186,6 +193,8 @@ def main() -> None:
         print(f"Wrote {target.relative_to(ROOT)} ({size / 1024:.0f} KB). Open it in any browser, online or offline.")
     elif args.command == "serve":
         serve(ROOT, args.port)
+    elif args.command == "freshness":
+        raise SystemExit(report_freshness(check_freshness(ROOT, update=args.accept)))
     elif args.command == "benchmark":
         result = run_benchmark(ROOT)
         save_benchmark(ROOT, result)

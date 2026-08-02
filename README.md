@@ -12,7 +12,7 @@ An offline-first legal information assistant that searches official public law o
 
 ## What it does
 
-You ask a plain-language question about your rights. The app searches 300+ passages from 9 official U.S. government sources and shows you the exact legal text that answers your question, with a link to verify it yourself.
+You ask a plain-language question about your rights. The app searches 300+ passages from 10 official U.S. government sources and shows you the exact legal text that answers your question, with a link to verify it yourself.
 
 **Example:**
 ```
@@ -28,9 +28,9 @@ Source: https://www.govinfo.gov/content/pkg/USCODE-2023-title29/...
 
 - **Fully offline** after a one-time source download
 - **Zero dependencies** beyond Python standard library
-- **9 official sources**: labor law, consumer protection, workplace safety, discrimination, organising, finance
-- **50 plain-language answers** across wages, dismissal, leave, safety, debt, credit reports, discrimination, and organising
-- **32 retrieval checks, 43 answer checks, and 10 must-decline checks**, run on every commit
+- **10 official sources**: labor law, consumer protection, workplace safety, discrimination, organising, housing, finance
+- **59 plain-language answers** across wages, dismissal, leave, safety, debt, credit, discrimination, organising, and housing
+- **32 retrieval checks, 50 answer checks, and 7 must-decline checks**, run on every commit
 - **Mobile-ready**: PWA with service worker + Android WebView APK
 - **< 4ms** average query latency
 - **< 500 KB** phone archive size
@@ -46,7 +46,7 @@ python -m pip install -e .
 python -m openrights ingest        # download official sources, build index
 python -m openrights ask "What is the minimum wage?"
 python -m openrights evaluate       # 32 retrieval checks
-python -m openrights coverage       # 43 answer checks + 10 must-decline checks
+python -m openrights coverage       # 50 answer checks + 7 must-decline checks
 python -m openrights benchmark      # measure latency and memory
 ```
 
@@ -85,6 +85,7 @@ For a native Android APK: see [RUNNING.md](RUNNING.md).
 | `evaluate` | Check that the right source is retrieved |
 | `coverage` | Check that a question reaches a plain-language answer |
 | `benchmark` | Measure latency, memory, archive size |
+| `freshness` | Check whether any source law has changed since it was reviewed |
 | `export-web` | Build phone archive in app/data/ |
 | `bundle` | Build single-file demo in dist/ |
 | `serve` | Serve to phone over LAN |
@@ -96,11 +97,11 @@ phone. The archive grew when the plain-language answers were added.
 
 | Metric | Value |
 | --- | --- |
-| Sources | 9 official government sources |
-| Plain-language answers | 50 |
+| Sources | 10 official government sources |
+| Plain-language answers | 59 |
 | Indexed statute passages | 1,144 |
 | Retrieval accuracy | 32/32 |
-| Answer coverage | 43/43 |
+| Answer coverage | 50/50 |
 | Query latency | ~17 ms |
 | Index RAM | ~13 MB |
 | Phone archive | 1.8 MB |

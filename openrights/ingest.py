@@ -113,6 +113,11 @@ PLAIN_SOURCES = {
         "National Labor Relations Act",
         "https://www.govinfo.gov/content/pkg/USCODE-2023-title29/html/USCODE-2023-title29-chap7.htm",
     ),
+    "housing": (
+        "Housing and tenancy",
+        "Fair Housing Act",
+        "https://www.govinfo.gov/content/pkg/USCODE-2023-title42/html/USCODE-2023-title42-chap45-subchapI.htm",
+    ),
     "discrimination": (
         "Workplace discrimination",
         "Civil Rights Act Title VII",

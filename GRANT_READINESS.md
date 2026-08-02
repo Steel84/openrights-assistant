@@ -10,7 +10,7 @@ Honest status of each Sentient Foundation requirement as of the latest commit.
 | Open source | **DONE** | Apache 2.0 license. Full code, pipeline, evals, prompts, and documentation on GitHub. |
 | Runs on budget phone | **DONE (retrieval)** | 500 KB archive, < 4ms latency, < 1 MB RAM. Needs on-device benchmark for LLM layer. |
 | LLM integration | **READY** | llama.cpp adapter, prompt template, Qwen2.5-1.5B Q2 GGUF selected. Awaiting device test. |
-| Useful application | **DONE** | 9 official sources across labor, consumer, safety, discrimination, organising, and finance law. 50 plain-language answers; 32 retrieval, 43 answer, and 10 must-decline checks all pass. |
+| Useful application | **DONE** | 10 official sources across labor, consumer, safety, discrimination, organising, housing, and finance law. 59 plain-language answers; 32 retrieval, 50 answer, and 7 must-decline checks all pass. A weekly job re-checks every source against the text it was written from. |
 | Privacy | **DONE** | Zero permissions, zero network after install, zero telemetry, no account required. |
 
 ## Supporting Materials

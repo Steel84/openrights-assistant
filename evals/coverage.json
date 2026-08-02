@@ -171,17 +171,42 @@
     {
       "question": "What is protected concerted activity?",
       "expected_heading": "What is protected concerted activity?"
+    },
+    {
+      "question": "How do I fight an eviction?",
+      "expected_heading": "How do I fight an eviction?"
+    },
+    {
+      "question": "Can my landlord raise the rent?",
+      "expected_heading": "Can my landlord raise the rent?"
+    },
+    {
+      "question": "What are my rights as a tenant?",
+      "expected_heading": "What are my rights as a tenant?"
+    },
+    {
+      "question": "Can a landlord refuse to rent to me because of my race?",
+      "expected_heading": "Can a landlord refuse to rent to me because of my race or religion?"
+    },
+    {
+      "question": "Can a landlord say no children allowed?",
+      "expected_heading": "Can a landlord refuse to rent to me because I have children?"
+    },
+    {
+      "question": "Does my landlord have to allow a service animal?",
+      "expected_heading": "Does my landlord have to accommodate a disability?"
+    },
+    {
+      "question": "My landlord kept my security deposit",
+      "expected_heading": "What can I do about a security deposit my landlord kept?"
     }
   ],
   "not_covered": [
     "What should I know before getting a mortgage?",
-    "How do I fight an eviction?",
     "How do I apply for unemployment benefits?",
     "Can I sue in small claims court?",
     "What is a warranty on a product?",
     "How do I get a divorce?",
-    "What are my rights as a tenant?",
-    "Can my landlord raise the rent?",
     "How do I file for bankruptcy?",
     "Do I need a visa to work here?"
   ]
