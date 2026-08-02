@@ -16,7 +16,7 @@ question, it says so rather than presenting an excerpt as if it were an answer.
 
 ## What is covered today
 
-46 plain-language answers across seven topics:
+50 plain-language answers across eight topics:
 
 | Topic | Answers | Covers |
 | --- | --- | --- |
@@ -26,9 +26,10 @@ question, it says so rather than presenting an excerpt as if it were an answer.
 | Workplace safety | 5 | Right to a safe workplace, refusing dangerous work, complaints, retaliation, training |
 | Debt collection | 6 | Contact rules, stopping contact, harassment, false statements, required notice, disputes |
 | Workplace discrimination | 5 | Protected characteristics, harassment, retaliation, accommodation, filing a charge |
+| Talking about pay and organising | 4 | Pay secrecy rules, union rights, concerted activity, complaining about conditions |
 | Credit reports | 5 | Reading your report, disputing errors, how long items stay, who may look, adverse action |
 
-Statute text is indexed for all eight sources listed in `data/sources.json`,
+Statute text is indexed for all nine sources listed in `data/sources.json`,
 including two with no plain-language layer yet: the Truth in Lending Act and
 FTC advertising guidance.
 
@@ -46,7 +47,7 @@ largest gaps, in rough order of how often people hit them:
 - Small claims procedure
 - Family law
 
-`python -m openrights coverage` checks both halves: that 39 questions reach the
+`python -m openrights coverage` checks both halves: that 43 questions reach the
 right answer, and that 10 questions from the gap list above are **declined**
 rather than answered.
 
@@ -116,7 +117,7 @@ candidate and are out of scope for the first release.
 
 ## Scaling this
 
-Writing 46 answers took a few hours. The work is legal summarisation, not
+Writing 50 answers took a few hours. The work is legal summarisation, not
 engineering, and it is the part that decides whether the tool helps anyone.
 
 This is deliberate for the first release: hand-written answers are auditable,

@@ -155,6 +155,22 @@
     {
       "question": "Do I get severance pay when I am laid off?",
       "expected_heading": "Do I get notice or severance pay before being fired?"
+    },
+    {
+      "question": "Can I be fired for discussing my salary with coworkers?",
+      "expected_heading": "Can I be fired for discussing my salary with coworkers?"
+    },
+    {
+      "question": "Can my employer stop me talking about pay?",
+      "expected_heading": "Can I be fired for discussing my salary with coworkers?"
+    },
+    {
+      "question": "Can I be fired for joining a union?",
+      "expected_heading": "Can I be fired for organising or joining a union?"
+    },
+    {
+      "question": "What is protected concerted activity?",
+      "expected_heading": "What is protected concerted activity?"
     }
   ],
   "not_covered": [

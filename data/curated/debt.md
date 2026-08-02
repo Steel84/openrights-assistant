@@ -8,7 +8,7 @@ Send a **written letter** telling them to stop. Once they receive it, they may o
 Keep a copy and send it so delivery can be proven.
 
 ## Can a debt collector threaten or harass me?
-Also asked: threaten me, threats, harassment, abusive, swearing, calling repeatedly, intimidation
+Also asked: can a debt collector threaten me, threaten me, threaten, threats, harassment, harass, abusive, swearing, calling repeatedly, intimidation
 No harassment, oppression, or abuse: **no threats of violence**, no obscene language, no repeated calls meant to annoy, and no publishing your name as someone who refuses to pay.
 
 ## Can a debt collector lie to me?

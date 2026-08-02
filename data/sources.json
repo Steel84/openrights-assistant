@@ -46,5 +46,11 @@
     "title": "Advertising and Marketing Basics",
     "url": "https://www.ftc.gov/business-guidance/advertising-marketing",
     "jurisdiction": "US"
+  },
+  {
+    "id": "nlra-uscode",
+    "title": "National Labor Relations Act - U.S. Code Title 29, Chapter 7",
+    "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title29/html/USCODE-2023-title29-chap7.htm",
+    "jurisdiction": "US"
   }
 ]

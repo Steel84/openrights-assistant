@@ -248,6 +248,22 @@ function reportOfflineReadiness() {
     return;
   }
   const saved = () => { status.textContent = "Ready \u00b7 saved for offline"; };
+
+  // Cache-first means a returning visitor renders the previous release: the
+  // new worker installs while the old one is still answering. Reload once when
+  // control changes, so the new archive is what they read.
+  //
+  // Only when a worker was already in charge. On a first visit control passes
+  // from nothing to the new worker, and the page is current already; reloading
+  // there would be a visible flash for no reason.
+  const hadController = Boolean(navigator.serviceWorker.controller);
+  let reloading = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (!hadController || reloading) return;
+    reloading = true;
+    location.reload();
+  });
+
   navigator.serviceWorker
     .register("./service-worker.js")
     .then((registration) => {

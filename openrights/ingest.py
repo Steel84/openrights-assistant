@@ -108,6 +108,11 @@ PLAIN_SOURCES = {
         "Civil Rights Act Title VII and the WARN Act",
         "https://www.govinfo.gov/content/pkg/USCODE-2023-title42/html/USCODE-2023-title42-chap21-subchapVI.htm",
     ),
+    "organising": (
+        "Talking about pay and organising",
+        "National Labor Relations Act",
+        "https://www.govinfo.gov/content/pkg/USCODE-2023-title29/html/USCODE-2023-title29-chap7.htm",
+    ),
     "discrimination": (
         "Workplace discrimination",
         "Civil Rights Act Title VII",

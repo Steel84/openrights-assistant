@@ -60,7 +60,7 @@ what you want in a 60 second demo. `docs/COVERAGE.md` has the full gap list.
 - Under 2 MB. Runs on a phone nobody would call new.
 - No account, no permissions, no network calls after install.
 - Every answer names the statute and links to it.
-- 8 official sources, 46 plain-language answers, checked on every commit.
+- 9 official sources, 50 plain-language answers, checked on every commit.
 
 ## Tips
 

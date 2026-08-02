@@ -12,7 +12,7 @@ An offline-first legal information assistant that searches official public law o
 
 ## What it does
 
-You ask a plain-language question about your rights. The app searches 300+ passages from 8 official U.S. government sources and shows you the exact legal text that answers your question, with a link to verify it yourself.
+You ask a plain-language question about your rights. The app searches 300+ passages from 9 official U.S. government sources and shows you the exact legal text that answers your question, with a link to verify it yourself.
 
 **Example:**
 ```
@@ -28,9 +28,9 @@ Source: https://www.govinfo.gov/content/pkg/USCODE-2023-title29/...
 
 - **Fully offline** after a one-time source download
 - **Zero dependencies** beyond Python standard library
-- **8 official sources**: labor law, consumer protection, workplace safety, discrimination, finance
-- **46 plain-language answers** across wages, dismissal, leave, safety, debt, credit reports, and discrimination
-- **32 retrieval checks, 39 answer checks, and 10 must-decline checks**, run on every commit
+- **9 official sources**: labor law, consumer protection, workplace safety, discrimination, organising, finance
+- **50 plain-language answers** across wages, dismissal, leave, safety, debt, credit reports, discrimination, and organising
+- **32 retrieval checks, 43 answer checks, and 10 must-decline checks**, run on every commit
 - **Mobile-ready**: PWA with service worker + Android WebView APK
 - **< 4ms** average query latency
 - **< 500 KB** phone archive size
@@ -46,7 +46,7 @@ python -m pip install -e .
 python -m openrights ingest        # download official sources, build index
 python -m openrights ask "What is the minimum wage?"
 python -m openrights evaluate       # 32 retrieval checks
-python -m openrights coverage       # 39 answer checks + 10 must-decline checks
+python -m openrights coverage       # 43 answer checks + 10 must-decline checks
 python -m openrights benchmark      # measure latency and memory
 ```
 
@@ -96,11 +96,11 @@ phone. The archive grew when the plain-language answers were added.
 
 | Metric | Value |
 | --- | --- |
-| Sources | 8 official government sources |
-| Plain-language answers | 46 |
+| Sources | 9 official government sources |
+| Plain-language answers | 50 |
 | Indexed statute passages | 1,144 |
 | Retrieval accuracy | 32/32 |
-| Answer coverage | 39/39 |
+| Answer coverage | 43/43 |
 | Query latency | ~17 ms |
 | Index RAM | ~13 MB |
 | Phone archive | 1.8 MB |

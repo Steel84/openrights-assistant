@@ -50,14 +50,6 @@ footer a:hover { text-decoration:underline; }
   .chips { gap:6px; }
   .chips button { padding:7px 10px; font-size:11px; }
 }
-@media (prefers-color-scheme: dark) {
-  :root { --ink:#e8efe8; --muted:#a0b0a8; --paper:#0f1f1a; --card:#162b24; --line:#2a4038; --accent:#f0845a; --success:#5dbb7f; }
-  .searchbox { box-shadow:8px 8px 0 #0a1510; }
-  .result p { color:#c8ddd4; }
-  input { border-bottom-color:var(--muted); }
-  .status i { box-shadow:0 0 0 4px #1a3a2d; }
-  @keyframes pulse { 0%,100%{box-shadow:0 0 0 4px #1a3a2d} 50%{box-shadow:0 0 0 7px #1a3a2d00} }
-}
 
 mark { background:oklch(90% 0.08 60); color:var(--ink); padding:1px 3px; border-radius:2px; }
 

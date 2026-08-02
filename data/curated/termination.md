@@ -9,7 +9,7 @@ A contract or union agreement can also override at-will.
 At-will also means **no advance notice is required**. See the next answer for notice and severance.
 
 ## Do I get notice or severance pay before being fired?
-Also asked: no notice, no warning, no severance, dismissed immediately, WARN Act, layoff notice period
+Also asked: severance pay when laid off, laid off, layoff, made redundant, no notice, no warning, no severance, dismissed immediately, WARN Act, layoff notice period
 Federal law requires **no notice and no severance pay** for an individual dismissal.
 
 The exception is mass layoffs: under the **WARN Act**, employers with 100 or more employees must generally give **60 days notice** of a plant closing or large layoff.
