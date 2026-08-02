@@ -221,13 +221,39 @@ function init() {
   document.querySelector("#results").innerHTML = '<div class="empty">Ask a question or pick an example below the search box.</div>';
 }
 
+const questionField = document.querySelector("#question");
+
+// A textarea does not size itself. Grow it to fit what is typed, up to four
+// lines, so a long question stays readable instead of scrolling out of view.
+const MAX_LINES = 4;
+function fitToContent() {
+  questionField.style.height = "auto";
+  const line = parseFloat(getComputedStyle(questionField).lineHeight) || 24;
+  const padding = questionField.offsetHeight - questionField.clientHeight;
+  const ceiling = line * MAX_LINES + padding;
+  questionField.style.height = `${Math.min(questionField.scrollHeight, ceiling)}px`;
+  questionField.style.overflowY = questionField.scrollHeight > ceiling ? "auto" : "hidden";
+}
+
+questionField.addEventListener("input", fitToContent);
+
+// Enter searches, as it would in a single-line field. A question is never
+// multi-paragraph, but leave Shift+Enter for anyone who wants a break.
+questionField.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
+    document.querySelector("#searchForm").requestSubmit();
+  }
+});
+
 document.querySelector("#searchForm").addEventListener("submit", (event) => {
   event.preventDefault();
-  showResults(document.querySelector("#question").value.trim());
+  showResults(questionField.value.trim());
 });
 
 document.querySelectorAll("[data-question]").forEach((button) => button.addEventListener("click", () => {
-  document.querySelector("#question").value = button.dataset.question;
+  questionField.value = button.dataset.question;
+  fitToContent();
   showResults(button.dataset.question);
 }));
 

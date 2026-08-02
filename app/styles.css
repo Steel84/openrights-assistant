@@ -46,9 +46,9 @@ h2 { margin:0; font-size:clamp(38px,7vw,76px); line-height:.93; letter-spacing:-
 .searchbox { background:var(--card); border:1px solid var(--line); padding:18px; box-shadow:8px 8px 0 var(--shadow); border-radius:4px; }
 .searchbox label { display:block; margin-bottom:10px; font:700 12px Arial,sans-serif; color:var(--muted); }
 .inputrow { display:flex; gap:10px; }
-input { min-width:0; flex:1; border:0; border-bottom:2px solid var(--ink); outline:0; padding:10px 4px; background:transparent; color:var(--ink); font:clamp(16px,4.2vw,20px) Georgia,serif; text-overflow:ellipsis; transition:border-color .2s; -webkit-appearance:none; appearance:none; border-radius:0; touch-action:manipulation; user-select:text; -webkit-user-select:text; pointer-events:auto; }
-input:focus { border-color:var(--accent); }
-input::placeholder { font-size:15px; color:var(--muted); opacity:1; overflow:hidden; text-overflow:ellipsis; }
+textarea { display:block; width:100%; min-width:0; flex:1; border:0; border-bottom:2px solid var(--ink); outline:0; padding:10px 4px; background:transparent; color:var(--ink); font:clamp(16px,4.2vw,20px)/1.4 Georgia,serif; resize:none; overflow:hidden; transition:border-color .2s; -webkit-appearance:none; appearance:none; border-radius:0; touch-action:manipulation; user-select:text; -webkit-user-select:text; pointer-events:auto; }
+textarea:focus { border-color:var(--accent); }
+textarea::placeholder { font-size:15px; color:var(--muted); opacity:1; overflow:hidden; text-overflow:ellipsis; }
 button { cursor:pointer; border:0; transition:transform .1s, background .2s; }
 button:active { transform:scale(0.97); }
 .inputrow button { background:var(--ink); color:var(--paper); padding:0 20px; font:700 14px Arial,sans-serif; border-radius:3px; }
@@ -79,8 +79,8 @@ footer a:hover { text-decoration:underline; }
      the shadow and most of the card padding for input width. */
   .searchbox { padding:14px 12px; box-shadow:3px 3px 0 var(--shadow); }
   .searchbox label { margin-bottom:8px; }
-  input { padding:10px 2px; font-size:17px; }
-  input::placeholder { font-size:14px; }
+  textarea { padding:10px 2px; font-size:17px; }
+  textarea::placeholder { font-size:14px; }
   footer { display:block; }
   footer span { display:block; margin-top:5px; }
   .chips { gap:6px; }
