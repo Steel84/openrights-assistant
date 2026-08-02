@@ -16,7 +16,7 @@ h2 { margin:0; font-size:clamp(38px,7vw,76px); line-height:.93; letter-spacing:-
 .searchbox { background:var(--card); border:1px solid var(--line); padding:18px; box-shadow:8px 8px 0 #e4dfd3; border-radius:4px; }
 .searchbox label { display:block; margin-bottom:10px; font:700 12px Arial,sans-serif; color:var(--muted); }
 .inputrow { display:flex; gap:10px; }
-input { min-width:0; flex:1; border:0; border-bottom:2px solid var(--ink); outline:0; padding:10px 0; background:transparent; color:var(--ink); font:20px Georgia,serif; transition:border-color .2s; }
+input { min-width:0; flex:1; border:0; border-bottom:2px solid var(--ink); outline:0; padding:10px 4px; background:transparent; color:var(--ink); font:20px Georgia,serif; transition:border-color .2s; -webkit-appearance:none; appearance:none; border-radius:0; touch-action:manipulation; }
 input:focus { border-color:var(--accent); }
 button { cursor:pointer; border:0; transition:transform .1s, background .2s; }
 button:active { transform:scale(0.97); }
