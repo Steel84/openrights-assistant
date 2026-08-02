@@ -1,32 +1,59 @@
-:root { --ink:#173b36; --muted:#65736d; --paper:#f4f0e8; --card:#fffdf8; --line:#d8d5ca; --accent:#d65f3b; }
+:root { --ink:#173b36; --muted:#65736d; --paper:#f4f0e8; --card:#fffdf8; --line:#d8d5ca; --accent:#d65f3b; --success:#3d8b5f; }
 * { box-sizing:border-box; }
-body { margin:0; background:var(--paper); color:var(--ink); font-family: Georgia, "Times New Roman", serif; }
+html { scroll-behavior:smooth; }
+body { margin:0; background:var(--paper); color:var(--ink); font-family: Georgia, "Times New Roman", serif; -webkit-font-smoothing:antialiased; }
 .shell { width:min(100% - 36px, 1040px); margin:auto; min-height:100vh; display:flex; flex-direction:column; }
 .topbar { padding:28px 0 24px; display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid var(--line); }
 .eyebrow,.kicker { margin:0 0 12px; font:700 11px/1.2 Arial,sans-serif; letter-spacing:.16em; color:var(--accent); }
 h1 { margin:0; font-size:clamp(28px,5vw,48px); line-height:.95; letter-spacing:-.04em; }
 h1 em { color:var(--accent); font-weight:400; }
 .status { display:flex; align-items:center; gap:8px; font:12px Arial,sans-serif; color:var(--muted); padding-top:4px; }
-.status i { width:9px; height:9px; background:#5d9b72; border-radius:50%; display:block; box-shadow:0 0 0 4px #dbe8d9; }
+.status i { width:9px; height:9px; background:var(--success); border-radius:50%; display:block; box-shadow:0 0 0 4px #dbe8d9; animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 4px #dbe8d9} 50%{box-shadow:0 0 0 7px #dbe8d900} }
 .hero { padding:clamp(48px,9vw,100px) 0 44px; max-width:760px; }
 h2 { margin:0; font-size:clamp(38px,7vw,76px); line-height:.93; letter-spacing:-.055em; }
-.lede { max-width:540px; margin:24px 0 34px; color:var(--muted); font:16px/1.55 Arial,sans-serif; }
-.searchbox { background:var(--card); border:1px solid var(--line); padding:18px; box-shadow:8px 8px 0 #e4dfd3; }
+.lede { max-width:580px; margin:24px 0 34px; color:var(--muted); font:16px/1.55 Arial,sans-serif; }
+.searchbox { background:var(--card); border:1px solid var(--line); padding:18px; box-shadow:8px 8px 0 #e4dfd3; border-radius:4px; }
 .searchbox label { display:block; margin-bottom:10px; font:700 12px Arial,sans-serif; color:var(--muted); }
 .inputrow { display:flex; gap:10px; }
-input { min-width:0; flex:1; border:0; border-bottom:2px solid var(--ink); outline:0; padding:10px 0; background:transparent; color:var(--ink); font:20px Georgia,serif; }
-button { cursor:pointer; border:0; }
-.inputrow button { background:var(--ink); color:white; padding:0 20px; font:700 14px Arial,sans-serif; }
+input { min-width:0; flex:1; border:0; border-bottom:2px solid var(--ink); outline:0; padding:10px 0; background:transparent; color:var(--ink); font:20px Georgia,serif; transition:border-color .2s; }
+input:focus { border-color:var(--accent); }
+button { cursor:pointer; border:0; transition:transform .1s, background .2s; }
+button:active { transform:scale(0.97); }
+.inputrow button { background:var(--ink); color:white; padding:0 20px; font:700 14px Arial,sans-serif; border-radius:3px; }
+.inputrow button:hover { background:#1f4f47; }
 .inputrow button span { color:#f5ad85; margin-left:8px; font-size:18px; }
 .chips { display:flex; gap:8px; flex-wrap:wrap; margin-top:18px; }
 .chips button { border:1px solid var(--line); color:var(--ink); background:transparent; border-radius:20px; padding:9px 13px; font:12px Arial,sans-serif; }
-.chips button:hover { border-color:var(--accent); color:var(--accent); }
+.chips button:hover { border-color:var(--accent); color:var(--accent); background:#fff8f5; }
 .results { display:grid; gap:14px; padding-bottom:40px; }
-.empty { color:var(--muted); font:14px Arial,sans-serif; padding:26px 0; }
-.result { background:var(--card); border:1px solid var(--line); padding:20px; }
+.empty { color:var(--muted); font:14px/1.6 Arial,sans-serif; padding:26px 0; }
+.result { background:var(--card); border:1px solid var(--line); padding:20px; border-radius:4px; transition:box-shadow .2s; }
+.result:hover { box-shadow:0 4px 12px rgba(23,59,54,.08); }
 .resulthead { display:flex; justify-content:space-between; gap:15px; margin-bottom:12px; font:700 12px Arial,sans-serif; }
 .score { color:var(--accent); white-space:nowrap; }
 .result p { margin:0; font:17px/1.5 Georgia,serif; color:#29453f; }
 .result a { display:inline-block; margin-top:14px; color:var(--accent); font:12px Arial,sans-serif; text-decoration:none; overflow-wrap:anywhere; }
-footer { margin-top:auto; padding:20px 0 26px; display:flex; justify-content:space-between; gap:15px; color:var(--muted); font:11px Arial,sans-serif; border-top:1px solid var(--line); }
-@media (max-width:600px) { .topbar { padding-top:20px; flex-direction:column; align-items:flex-start; gap:14px; } .status { padding-top:0; } .inputrow { display:block; } .inputrow button { width:100%; margin-top:15px; padding:14px; } .searchbox { box-shadow:5px 5px 0 #e4dfd3; } footer { display:block; } footer span { display:block; margin-top:5px; } }
+.result a:hover { text-decoration:underline; }
+footer { margin-top:auto; padding:20px 0 26px; display:flex; justify-content:space-between; gap:15px; color:var(--muted); font:11px Arial,sans-serif; border-top:1px solid var(--line); flex-wrap:wrap; }
+footer a { color:var(--accent); text-decoration:none; }
+footer a:hover { text-decoration:underline; }
+@media (max-width:600px) {
+  .topbar { padding-top:20px; flex-direction:column; align-items:flex-start; gap:14px; }
+  .status { padding-top:0; }
+  .inputrow { display:block; }
+  .inputrow button { width:100%; margin-top:15px; padding:14px; }
+  .searchbox { box-shadow:5px 5px 0 #e4dfd3; }
+  footer { display:block; }
+  footer span { display:block; margin-top:5px; }
+  .chips { gap:6px; }
+  .chips button { padding:7px 10px; font-size:11px; }
+}
+@media (prefers-color-scheme: dark) {
+  :root { --ink:#e8efe8; --muted:#a0b0a8; --paper:#0f1f1a; --card:#162b24; --line:#2a4038; --accent:#f0845a; --success:#5dbb7f; }
+  .searchbox { box-shadow:8px 8px 0 #0a1510; }
+  .result p { color:#c8ddd4; }
+  input { border-bottom-color:var(--muted); }
+  .status i { box-shadow:0 0 0 4px #1a3a2d; }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 4px #1a3a2d} 50%{box-shadow:0 0 0 7px #1a3a2d00} }
+}

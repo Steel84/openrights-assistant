@@ -4,9 +4,25 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "openrights-assistant"
-version = "0.1.0"
-description = "Offline-first retrieval assistant for public legal and consumer sources"
+version = "0.2.0"
+description = "Offline-first retrieval assistant for public legal and consumer-protection sources"
 requires-python = ">=3.10"
+license = "Apache-2.0"
+readme = "README.md"
+keywords = ["legal", "offline", "RAG", "retrieval", "consumer-rights", "labor-law"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Education",
+]
+
+[project.urls]
+Repository = "https://github.com/Steel84/openrights-assistant"
+Documentation = "https://github.com/Steel84/openrights-assistant/blob/main/README.md"
+Issues = "https://github.com/Steel84/openrights-assistant/issues"
 
 [project.scripts]
 openrights = "openrights.cli:main"

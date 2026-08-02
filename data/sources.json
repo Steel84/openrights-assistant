@@ -2,16 +2,49 @@
   {
     "id": "flsa-uscode",
     "title": "Fair Labor Standards Act - U.S. Code Title 29, Chapter 8",
-    "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title29/html/USCODE-2023-title29-chap8.htm"
+    "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title29/html/USCODE-2023-title29-chap8.htm",
+    "jurisdiction": "US"
+  },
+  {
+    "id": "fmla-uscode",
+    "title": "Family and Medical Leave Act - U.S. Code Title 29, Chapter 28",
+    "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title29/html/USCODE-2023-title29-chap28.htm",
+    "jurisdiction": "US"
+  },
+  {
+    "id": "osha-uscode",
+    "title": "Occupational Safety and Health Act - U.S. Code Title 29, Chapter 15",
+    "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title29/html/USCODE-2023-title29-chap15.htm",
+    "jurisdiction": "US"
+  },
+  {
+    "id": "fdcpa-uscode",
+    "title": "Fair Debt Collection Practices Act - U.S. Code Title 15, Chapter 41, Subchapter V",
+    "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap41-subchapV.htm",
+    "jurisdiction": "US"
+  },
+  {
+    "id": "title7-civilrights",
+    "title": "Civil Rights Act Title VII - Employment Discrimination (U.S. Code Title 42, Chapter 21, Subchapter VI)",
+    "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title42/html/USCODE-2023-title42-chap21-subchapVI.htm",
+    "jurisdiction": "US"
+  },
+  {
+    "id": "tila-uscode",
+    "title": "Truth in Lending Act - U.S. Code Title 15, Chapter 41, Subchapter I",
+    "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap41-subchapI.htm",
+    "jurisdiction": "US"
   },
   {
     "id": "ftc-phishing",
     "title": "How To Recognize and Avoid Phishing Scams",
-    "url": "https://consumer.ftc.gov/articles/how-recognize-and-avoid-phishing-scams"
+    "url": "https://consumer.ftc.gov/articles/how-recognize-and-avoid-phishing-scams",
+    "jurisdiction": "US"
   },
   {
     "id": "ftc-advertising",
     "title": "Advertising and Marketing Basics",
-    "url": "https://www.ftc.gov/business-guidance/advertising-marketing"
+    "url": "https://www.ftc.gov/business-guidance/advertising-marketing",
+    "jurisdiction": "US"
   }
 ]

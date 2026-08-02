@@ -1,15 +1,130 @@
 [
-  {"question": "What is the federal minimum wage?", "expected_source": "Fair Labor Standards Act"},
-  {"question": "How is overtime compensation calculated?", "expected_source": "Fair Labor Standards Act"},
-  {"question": "How many hours trigger federal overtime rules?", "expected_source": "Fair Labor Standards Act"},
-  {"question": "Can state law set a higher minimum wage?", "expected_source": "Fair Labor Standards Act"},
-  {"question": "Does the law address equal pay for equal work?", "expected_source": "Fair Labor Standards Act"},
-  {"question": "What can I do if I clicked a phishing link?", "expected_source": "Phishing"},
-  {"question": "How do I recognize a phishing scam?", "expected_source": "Phishing"},
-  {"question": "How should I report a phishing message?", "expected_source": "Phishing"},
-  {"question": "Why use multi-factor authentication against phishing?", "expected_source": "Phishing"},
-  {"question": "What makes an advertisement deceptive?", "expected_source": "Advertising and Marketing"}
-  ,{"question": "Must advertising claims be truthful?", "expected_source": "Advertising and Marketing"},
-  {"question": "What evidence should support an advertising claim?", "expected_source": "Advertising and Marketing"},
-  {"question": "Do consumer protection rules apply to online advertising?", "expected_source": "Advertising and Marketing"}
+  {
+    "question": "What is the federal minimum wage?",
+    "expected_source": "Fair Labor Standards Act"
+  },
+  {
+    "question": "How is overtime compensation calculated?",
+    "expected_source": "Fair Labor Standards Act"
+  },
+  {
+    "question": "How many hours trigger federal overtime rules?",
+    "expected_source": "Fair Labor Standards Act"
+  },
+  {
+    "question": "Can state law set a higher minimum wage?",
+    "expected_source": "Fair Labor Standards Act"
+  },
+  {
+    "question": "Does the law address equal pay for equal work?",
+    "expected_source": "Civil Rights Act"
+  },
+  {
+    "question": "Are salaried employees exempt from overtime?",
+    "expected_source": "Fair Labor Standards Act"
+  },
+  {
+    "question": "What records must an employer keep about wages?",
+    "expected_source": "Fair Labor Standards Act"
+  },
+  {
+    "question": "What can I do if I clicked a phishing link?",
+    "expected_source": "Phishing"
+  },
+  {
+    "question": "How do I recognize a phishing scam?",
+    "expected_source": "Phishing"
+  },
+  {
+    "question": "How should I report a phishing message?",
+    "expected_source": "Phishing"
+  },
+  {
+    "question": "Why use multi-factor authentication against phishing?",
+    "expected_source": "Phishing"
+  },
+  {
+    "question": "What are common signs of a phishing email?",
+    "expected_source": "Phishing"
+  },
+  {
+    "question": "What makes an advertisement deceptive?",
+    "expected_source": "Truth in Lending"
+  },
+  {
+    "question": "Must advertising claims be truthful?",
+    "expected_source": "Advertising and Marketing"
+  },
+  {
+    "question": "What evidence should support an advertising claim?",
+    "expected_source": "Advertising and Marketing"
+  },
+  {
+    "question": "Do consumer protection rules apply to online advertising?",
+    "expected_source": "Advertising and Marketing"
+  },
+  {
+    "question": "Can I take unpaid leave to care for a sick family member?",
+    "expected_source": "Family and Medical Leave"
+  },
+  {
+    "question": "How many weeks of family leave am I entitled to?",
+    "expected_source": "Family and Medical Leave"
+  },
+  {
+    "question": "Does my employer have to hold my job during medical leave?",
+    "expected_source": "Family and Medical Leave"
+  },
+  {
+    "question": "Who is eligible for family and medical leave?",
+    "expected_source": "Family and Medical Leave"
+  },
+  {
+    "question": "Can a debt collector call me at work?",
+    "expected_source": "Debt Collection"
+  },
+  {
+    "question": "How do I stop a debt collector from contacting me?",
+    "expected_source": "Debt Collection"
+  },
+  {
+    "question": "What are my rights when a debt collector contacts me?",
+    "expected_source": "Debt Collection"
+  },
+  {
+    "question": "Can a debt collector threaten me?",
+    "expected_source": "Debt Collection"
+  },
+  {
+    "question": "Do I have the right to a safe workplace?",
+    "expected_source": "Occupational Safety"
+  },
+  {
+    "question": "Can a worker refuse unsafe or hazardous working conditions?",
+    "expected_source": "Occupational Safety"
+  },
+  {
+    "question": "How do I file a workplace safety complaint?",
+    "expected_source": "Occupational Safety"
+  },
+  {
+    "question": "What should I know before getting a mortgage?",
+    "expected_source": "Truth in Lending"
+  },
+  {
+    "question": "What is a mortgage closing disclosure?",
+    "expected_source": "Truth in Lending"
+  },
+  {
+    "question": "What types of employment discrimination are illegal?",
+    "expected_source": "Civil Rights"
+  },
+  {
+    "question": "Can an employer discriminate based on race?",
+    "expected_source": "Civil Rights"
+  },
+  {
+    "question": "What is workplace harassment?",
+    "expected_source": "Civil Rights"
+  }
 ]

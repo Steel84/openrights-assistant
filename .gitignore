@@ -1,11 +1,36 @@
+# Python
 .venv/
 __pycache__/
 *.py[cod]
 .pytest_cache/
+*.egg-info/
+build/
+
+# Generated data (reproducible via `ingest`)
 data/raw/
 data/processed/
+
+# Models (too large for git)
 models/*.gguf
-benchmarks/latest.json
+
+# Benchmarks (machine-specific)
+benchmarks/
+
+# Android build outputs
 android/app/src/main/assets/
 android/app/build/
+android/.gradle/
+android/build/
+android/local.properties
+
+# Demo bundle (reproducible via `bundle`)
 dist/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
