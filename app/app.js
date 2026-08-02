@@ -88,10 +88,36 @@ document.querySelectorAll("[data-question]").forEach((button) => button.addEvent
   showResults(button.dataset.question);
 }));
 
-// A service worker needs an http(s) origin; the APK runs from file:// and does
-// not need one, because its assets are already on the device.
-if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-  navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+// Offline caching needs a service worker, and browsers only allow one in a
+// secure context: https, or localhost. Plain http on a bare IP is refused, so
+// registering there silently does nothing and the app looks broken in airplane
+// mode. Say so instead of pretending. The APK runs from file:// and needs no
+// worker, because its assets are already on the device.
+function reportOfflineReadiness() {
+  const status = document.querySelector("#statusText");
+  if (!status || !state.ready) return;
+  if (location.protocol === "file:") {
+    status.textContent = "Ready \u00b7 on this device";
+    return;
+  }
+  if (!("serviceWorker" in navigator) || !window.isSecureContext) {
+    status.textContent = "Ready \u00b7 online only (needs https to save offline)";
+    return;
+  }
+  const saved = () => { status.textContent = "Ready \u00b7 saved for offline"; };
+  navigator.serviceWorker
+    .register("./service-worker.js")
+    .then((registration) => {
+      if (navigator.serviceWorker.controller) return saved();
+      const worker = registration.installing || registration.waiting;
+      if (!worker) return saved();
+      status.textContent = "Ready \u00b7 saving for offline\u2026";
+      worker.addEventListener("statechange", () => {
+        if (worker.state === "activated" || worker.state === "redundant") saved();
+      });
+    })
+    .catch(() => { status.textContent = "Ready \u00b7 online only"; });
 }
 
 init();
+reportOfflineReadiness();
