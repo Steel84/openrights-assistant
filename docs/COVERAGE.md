@@ -97,6 +97,23 @@ python -m openrights evaluate
 python -m openrights export-web
 ```
 
+## What the guards do not fix
+
+The guards decide whether to give an *answer*. The statute passages shown
+underneath when no answer exists are not filtered by score, because no score
+separates them.
+
+Measured across `evals/coverage.json`: the top statute citation for a covered
+question scores between 0.05 and 0.20 (median 0.20); for an uncovered question,
+between 0.10 and 0.28. The ranges overlap almost completely, so any threshold
+that removed the noise would also remove real citations.
+
+So when the archive has no answer, the passages shown are the nearest text by
+similarity and may be irrelevant. The interface labels them as such rather than
+filtering on a number that does not mean anything. Closing this needs a real
+relevance signal, not a tuned constant: sentence embeddings are the obvious
+candidate and are out of scope for the first release.
+
 ## Scaling this
 
 Writing 46 answers took a few hours. The work is legal summarisation, not
