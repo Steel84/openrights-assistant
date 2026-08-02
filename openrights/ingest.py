@@ -52,15 +52,26 @@ def clean(source: str) -> str:
     return "\n".join(parser.parts)
 
 
-def chunk(text: str, size: int = 450, overlap: int = 60) -> list[str]:
+def chunk(text: str, size: int = 200, overlap: int = 40) -> list[str]:
     """Split text into overlapping word-level chunks."""
     words = text.split()
     step = max(size - overlap, 1)
-    return [
-        " ".join(words[start : start + size])
-        for start in range(0, len(words), step)
-        if words[start : start + size]
-    ]
+    chunks = []
+    for start in range(0, len(words), step):
+        segment = words[start : start + size]
+        if not segment:
+            continue
+        joined = " ".join(segment)
+        # Skip chunks that are mostly legal citations, amendment history, or procedural
+        noise_markers = ("Pub.", "Stat.", "Subsec.", "subsec.", "par.", "subpar.", "§", "sect.", "Amdt.")
+        noise_count = sum(1 for w in segment if w in noise_markers or w.startswith("§"))
+        # Also count patterns like "L. 89-601" as noise
+        text_check = joined.lower()
+        pub_l_count = text_check.count("pub. l.") + text_check.count("stat.")
+        if noise_count > len(segment) * 0.05 or pub_l_count > 3:
+            continue
+        chunks.append(joined)
+    return chunks
 
 
 def ingest(root: Path) -> int:
@@ -92,6 +103,22 @@ def ingest(root: Path) -> int:
                 "text": chunk_text,
                 "jurisdiction": source.get("jurisdiction", "US"),
             })
+
+    # Also load curated plain-language FAQ files
+    curated_dir = root / "data/curated"
+    if curated_dir.exists():
+        for faq_file in sorted(curated_dir.glob("*.txt")):
+            title = faq_file.stem.replace("-", " ").replace("_", " ").title() + " (Plain Language)"
+            text = faq_file.read_text(encoding="utf-8")
+            for number, chunk_text in enumerate(chunk(text, size=120, overlap=20)):
+                chunks.append({
+                    "id": f"curated-{faq_file.stem}:{number}",
+                    "source": title,
+                    "url": "https://github.com/Steel84/openrights-assistant",
+                    "text": chunk_text,
+                    "jurisdiction": "US",
+                })
+        print(f"  Added curated plain-language sources from {curated_dir}")
 
     if not chunks:
         raise SystemExit("No chunks produced. Check network and source URLs.")

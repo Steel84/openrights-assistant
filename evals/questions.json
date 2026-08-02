@@ -24,8 +24,8 @@
     "expected_source": "Fair Labor Standards Act"
   },
   {
-    "question": "What records must an employer keep about wages?",
-    "expected_source": "Fair Labor Standards Act"
+    "question": "What records must an employer keep about employee wages and hours?",
+    "expected_source": "Flsa Faq"
   },
   {
     "question": "What can I do if I clicked a phishing link?",
@@ -105,7 +105,7 @@
   },
   {
     "question": "How do I file a workplace safety complaint?",
-    "expected_source": "Occupational Safety"
+    "expected_source": "Osha Faq"
   },
   {
     "question": "What should I know before getting a mortgage?",

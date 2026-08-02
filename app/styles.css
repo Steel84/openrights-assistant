@@ -57,3 +57,5 @@ footer a:hover { text-decoration:underline; }
   .status i { box-shadow:0 0 0 4px #1a3a2d; }
   @keyframes pulse { 0%,100%{box-shadow:0 0 0 4px #1a3a2d} 50%{box-shadow:0 0 0 7px #1a3a2d00} }
 }
+
+mark { background:oklch(90% 0.08 60); color:var(--ink); padding:1px 3px; border-radius:2px; }
