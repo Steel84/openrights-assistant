@@ -3,12 +3,18 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-WEB_KEYS = ("id", "source", "url", "text")
+WEB_KEYS = ("id", "source", "url", "text", "kind")
+# Present only on plain-language answers, absent on raw statute passages.
+WEB_OPTIONAL_KEYS = ("heading", "statute")
 
 
 def payload_for_web(payload: dict) -> dict:
     """Drop the training-time vectors: the browser recomputes them from text."""
-    chunks = [{key: chunk[key] for key in WEB_KEYS} for chunk in payload["chunks"]]
+    chunks = []
+    for chunk in payload["chunks"]:
+        item = {key: chunk[key] for key in WEB_KEYS if key in chunk}
+        item.update({key: chunk[key] for key in WEB_OPTIONAL_KEYS if key in chunk})
+        chunks.append(item)
     return {"idf": payload["idf"], "chunks": chunks}
 
 

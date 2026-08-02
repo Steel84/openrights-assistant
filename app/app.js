@@ -42,21 +42,112 @@ function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
 }
 
+// The plain-language answers are written by this project, so a tiny, closed
+// subset of Markdown is safe: paragraph breaks and **bold**. Everything is
+// escaped first, so nothing in the archive can inject markup.
+function renderAnswer(body) {
+  return body
+    .split(/\n\s*\n/)
+    .map((para) => para.trim())
+    .filter(Boolean)
+    .map((para) => `<p>${escapeHtml(para).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")}</p>`)
+    .join("");
+}
+
+function highlight(text, question) {
+  const terms = [...new Set(words(question))].filter((term) => term.length > 3);
+  const escaped = escapeHtml(text);
+  if (!terms.length) return escaped;
+  const pattern = new RegExp(`\\b(${terms.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`, "gi");
+  return escaped.replace(pattern, "<mark>$1</mark>");
+}
+
+// Statute text runs for hundreds of words. Show the window around the first
+// matching term instead of the arbitrary start of the chunk.
+function excerpt(text, question, size) {
+  const terms = words(question).filter((term) => term.length > 3);
+  const tokens = text.split(/\s+/);
+  if (tokens.length <= size) return text;
+  let start = 0;
+  for (let i = 0; i < tokens.length; i += 1) {
+    const token = tokens[i].toLowerCase();
+    if (terms.some((term) => token.includes(term))) {
+      start = Math.max(0, i - 12);
+      break;
+    }
+  }
+  const slice = tokens.slice(start, start + size).join(" ");
+  return `${start > 0 ? "\u2026 " : ""}${slice}${start + size < tokens.length ? " \u2026" : ""}`;
+}
+
+function splitHeading(text) {
+  const [heading, ...rest] = text.split(/\n\s*\n/);
+  return { heading: heading.trim(), body: rest.join("\n\n").trim() };
+}
+
+function answerCard(hit, question) {
+  const { chunk } = hit;
+  const parsed = splitHeading(chunk.text);
+  const heading = chunk.heading || parsed.heading;
+  const body = chunk.heading ? chunk.text.slice(chunk.text.indexOf("\n")).trim() : parsed.body;
+  const card = document.createElement("article");
+  card.className = "answer";
+  card.innerHTML = `
+    <p class="answerlabel">Answer</p>
+    <h3>${escapeHtml(heading)}</h3>
+    ${renderAnswer(body)}
+    <p class="answermeta">${escapeHtml(chunk.statute || chunk.source)} \u00b7 <a href="${escapeHtml(chunk.url)}" target="_blank" rel="noreferrer">read the law</a></p>`;
+  return card;
+}
+
+function passageCard(hit, index, question) {
+  const { chunk } = hit;
+  const card = document.createElement("article");
+  card.className = "result";
+  card.innerHTML = `
+    <div class="resulthead"><span>[${index}] ${escapeHtml(chunk.source)}</span><span class="score">${hit.score.toFixed(3)}</span></div>
+    <p>${highlight(excerpt(chunk.text, question, 70), question)}</p>
+    <a href="${escapeHtml(chunk.url)}" target="_blank" rel="noreferrer">Open source \u2197</a>`;
+  return card;
+}
+
 function showResults(question) {
   const container = document.querySelector("#results");
   if (!state.ready) return;
+  container.innerHTML = "";
   if (!question) {
     container.innerHTML = '<div class="empty">Type a question to search the local archive.</div>';
     return;
   }
-  const hits = search(question, 5).filter((hit) => hit.score > 0);
-  container.innerHTML = `<div class="empty">${hits.length ? `Showing ${hits.length} source passages for “${escapeHtml(question)}”.` : "No matching passage in this archive. Try different words."}</div>`;
-  hits.forEach((hit, index) => {
-    const card = document.createElement("article");
-    card.className = "result";
-    card.innerHTML = `<div class="resulthead"><span>[${index + 1}] ${escapeHtml(hit.chunk.source)}</span><span class="score">${hit.score.toFixed(3)}</span></div><p>${escapeHtml(hit.chunk.text)}</p><a href="${escapeHtml(hit.chunk.url)}" target="_blank" rel="noreferrer">Open source ↗</a>`;
-    container.appendChild(card);
-  });
+
+  const hits = search(question, 14).filter((hit) => hit.score > 0);
+  if (!hits.length) {
+    container.innerHTML = '<div class="empty">No matching passage in this archive. Try different words.</div>';
+    return;
+  }
+
+  const answer = hits.find((hit) => hit.chunk.kind === "plain");
+  const passages = hits.filter((hit) => hit !== answer).slice(0, 4);
+
+  if (answer) {
+    container.appendChild(answerCard(answer, question));
+  } else {
+    const notice = document.createElement("div");
+    notice.className = "empty";
+    notice.textContent = "No plain-language answer covers this yet. Here is the closest text in the law.";
+    container.appendChild(notice);
+  }
+
+  if (!passages.length) return;
+
+  const details = document.createElement("details");
+  details.className = "sources";
+  if (!answer) details.open = true;
+  const summary = document.createElement("summary");
+  summary.textContent = `${passages.length} supporting passage${passages.length === 1 ? "" : "s"} from the law`;
+  details.appendChild(summary);
+  passages.forEach((hit, index) => details.appendChild(passageCard(hit, index + 1, question)));
+  container.appendChild(details);
 }
 
 function init() {
@@ -74,7 +165,7 @@ function init() {
   });
   state.ready = true;
   document.querySelector("#chunkCount").textContent = state.chunks.length;
-  statusText.textContent = "Ready · on this device";
+  statusText.textContent = "Ready \u00b7 on this device";
   document.querySelector("#results").innerHTML = '<div class="empty">Ask a question or pick an example below the search box.</div>';
 }
 

@@ -74,6 +74,83 @@ def chunk(text: str, size: int = 200, overlap: int = 40) -> list[str]:
     return chunks
 
 
+# Each plain-language file is a set of "## question" sections. One section is one
+# answer, so a search hit is a whole thought rather than a slice cutting across
+# unrelated topics.
+PLAIN_SOURCES = {
+    "flsa": (
+        "Wages and overtime",
+        "Fair Labor Standards Act",
+        "https://www.govinfo.gov/content/pkg/USCODE-2023-title29/html/USCODE-2023-title29-chap8.htm",
+    ),
+    "fmla": (
+        "Family and medical leave",
+        "Family and Medical Leave Act",
+        "https://www.govinfo.gov/content/pkg/USCODE-2023-title29/html/USCODE-2023-title29-chap28.htm",
+    ),
+    "osha": (
+        "Workplace safety",
+        "Occupational Safety and Health Act",
+        "https://www.govinfo.gov/content/pkg/USCODE-2023-title29/html/USCODE-2023-title29-chap15.htm",
+    ),
+    "debt": (
+        "Debt collection",
+        "Fair Debt Collection Practices Act",
+        "https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap41-subchapV.htm",
+    ),
+    "discrimination": (
+        "Workplace discrimination",
+        "Civil Rights Act Title VII",
+        "https://www.govinfo.gov/content/pkg/USCODE-2023-title42/html/USCODE-2023-title42-chap21-subchapVI.htm",
+    ),
+}
+
+
+def split_sections(text: str) -> list[tuple[str, str]]:
+    """Split a plain-language file into (heading, body) pairs."""
+    sections: list[tuple[str, str]] = []
+    heading = None
+    body: list[str] = []
+    for line in text.splitlines():
+        if line.startswith("## "):
+            if heading:
+                sections.append((heading, "\n".join(body).strip()))
+            heading = line[3:].strip()
+            body = []
+        elif heading:
+            body.append(line)
+    if heading:
+        sections.append((heading, "\n".join(body).strip()))
+    return [(h, b) for h, b in sections if b]
+
+
+def load_plain_answers(root: Path) -> list[dict]:
+    directory = root / "data/curated"
+    if not directory.exists():
+        return []
+    answers: list[dict] = []
+    for path in sorted(directory.glob("*.md")):
+        topic, statute, url = PLAIN_SOURCES.get(
+            path.stem, (path.stem.title(), path.stem.upper(), "")
+        )
+        for number, (heading, body) in enumerate(split_sections(path.read_text(encoding="utf-8"))):
+            answers.append({
+                "id": f"plain-{path.stem}:{number}",
+                "source": topic,
+                "statute": statute,
+                "heading": heading,
+                "url": url,
+                # The heading is indexed with the body: users search in the words
+                # of the question they are asking, not the words of the statute.
+                "text": f"{heading}\n\n{body}",
+                "jurisdiction": "US",
+                "kind": "plain",
+            })
+    if answers:
+        print(f"  Loaded {len(answers)} plain-language answers.")
+    return answers
+
+
 def ingest(root: Path) -> int:
     """Download all sources, clean, chunk, and build the TF-IDF index."""
     sources = json.loads((root / "data/sources.json").read_text(encoding="utf-8"))
@@ -102,23 +179,10 @@ def ingest(root: Path) -> int:
                 "url": source["url"],
                 "text": chunk_text,
                 "jurisdiction": source.get("jurisdiction", "US"),
+                "kind": "law",
             })
 
-    # Also load curated plain-language FAQ files
-    curated_dir = root / "data/curated"
-    if curated_dir.exists():
-        for faq_file in sorted(curated_dir.glob("*.txt")):
-            title = faq_file.stem.replace("-", " ").replace("_", " ").title() + " (Plain Language)"
-            text = faq_file.read_text(encoding="utf-8")
-            for number, chunk_text in enumerate(chunk(text, size=120, overlap=20)):
-                chunks.append({
-                    "id": f"curated-{faq_file.stem}:{number}",
-                    "source": title,
-                    "url": "https://github.com/Steel84/openrights-assistant",
-                    "text": chunk_text,
-                    "jurisdiction": "US",
-                })
-        print(f"  Added curated plain-language sources from {curated_dir}")
+    chunks.extend(load_plain_answers(root))
 
     if not chunks:
         raise SystemExit("No chunks produced. Check network and source URLs.")

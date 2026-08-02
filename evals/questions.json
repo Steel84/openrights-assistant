@@ -25,7 +25,7 @@
   },
   {
     "question": "What records must an employer keep about employee wages and hours?",
-    "expected_source": "Flsa Faq"
+    "expected_source": "Wages and overtime"
   },
   {
     "question": "What can I do if I clicked a phishing link?",
@@ -105,7 +105,7 @@
   },
   {
     "question": "How do I file a workplace safety complaint?",
-    "expected_source": "Osha Faq"
+    "expected_source": "Workplace safety"
   },
   {
     "question": "What should I know before getting a mortgage?",

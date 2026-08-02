@@ -60,3 +60,31 @@ footer a:hover { text-decoration:underline; }
 }
 
 mark { background:oklch(90% 0.08 60); color:var(--ink); padding:1px 3px; border-radius:2px; }
+
+/* The answer: one plain-language explanation, set to be read, not scanned. */
+.answer { background:var(--card); border:1px solid var(--line); border-radius:4px; padding:26px 24px 22px; }
+.answerlabel { margin:0 0 10px; font:700 11px Arial,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+.answer h3 { margin:0 0 16px; font:400 26px/1.25 Georgia,serif; letter-spacing:-.01em; color:var(--ink); }
+.answer p { margin:0 0 14px; font:17px/1.62 Georgia,serif; color:#29453f; max-width:62ch; }
+.answer p:last-of-type { margin-bottom:0; }
+.answer strong { font-weight:700; color:var(--ink); }
+.answermeta { margin:20px 0 0 !important; padding-top:14px; border-top:1px solid var(--line); font:12px/1.5 Arial,sans-serif !important; color:var(--muted) !important; }
+.answermeta a { color:var(--accent); text-decoration:none; }
+.answermeta a:hover { text-decoration:underline; }
+
+/* The statute itself is evidence, not the answer. Available, not in the way. */
+.sources { border-top:1px solid var(--line); padding-top:8px; }
+.sources summary { cursor:pointer; padding:10px 0; font:12px Arial,sans-serif; color:var(--muted); list-style:none; }
+.sources summary::-webkit-details-marker { display:none; }
+.sources summary::before { content:"\25B8"; display:inline-block; margin-right:8px; transition:transform .15s ease; }
+.sources[open] summary::before { transform:rotate(90deg); }
+.sources summary:hover { color:var(--accent); }
+.sources .result { margin-bottom:12px; }
+.sources .result:last-child { margin-bottom:0; }
+.result p { font-size:15px; line-height:1.55; }
+
+@media (max-width:600px) {
+  .answer { padding:22px 18px 18px; }
+  .answer h3 { font-size:22px; }
+  .answer p { font-size:16px; }
+}
