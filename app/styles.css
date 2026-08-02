@@ -16,8 +16,9 @@ h2 { margin:0; font-size:clamp(38px,7vw,76px); line-height:.93; letter-spacing:-
 .searchbox { background:var(--card); border:1px solid var(--line); padding:18px; box-shadow:8px 8px 0 #e4dfd3; border-radius:4px; }
 .searchbox label { display:block; margin-bottom:10px; font:700 12px Arial,sans-serif; color:var(--muted); }
 .inputrow { display:flex; gap:10px; }
-input { min-width:0; flex:1; border:0; border-bottom:2px solid var(--ink); outline:0; padding:10px 4px; background:transparent; color:var(--ink); font:16px Georgia,serif; transition:border-color .2s; -webkit-appearance:none; appearance:none; border-radius:0; touch-action:manipulation; user-select:text; -webkit-user-select:text; pointer-events:auto; }
+input { min-width:0; flex:1; border:0; border-bottom:2px solid var(--ink); outline:0; padding:10px 4px; background:transparent; color:var(--ink); font:clamp(16px,4.2vw,20px) Georgia,serif; text-overflow:ellipsis; transition:border-color .2s; -webkit-appearance:none; appearance:none; border-radius:0; touch-action:manipulation; user-select:text; -webkit-user-select:text; pointer-events:auto; }
 input:focus { border-color:var(--accent); }
+input::placeholder { font-size:15px; color:var(--muted); opacity:1; overflow:hidden; text-overflow:ellipsis; }
 button { cursor:pointer; border:0; transition:transform .1s, background .2s; }
 button:active { transform:scale(0.97); }
 .inputrow button { background:var(--ink); color:white; padding:0 20px; font:700 14px Arial,sans-serif; border-radius:3px; }
