@@ -12,7 +12,7 @@ An offline-first legal information assistant that searches official public law o
 
 ## What it does
 
-You ask a plain-language question about your rights. The app searches 300+ passages from 10 official U.S. government sources and shows you the exact legal text that answers your question, with a link to verify it yourself.
+You ask a plain-language question about your rights. The app searches 1,390+ passages from 10 official U.S. government sources and shows you the exact legal text that answers your question, with a link to verify it yourself.
 
 **Example:**
 ```
