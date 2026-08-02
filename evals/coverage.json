@@ -13,8 +13,8 @@
       "expected_heading": "Can my employer make me work overtime?"
     },
     {
-      "question": "Who is exempt from overtime?",
-      "expected_heading": "Who is exempt from overtime pay?"
+      "question": "Are salaried employees exempt from overtime?",
+      "expected_heading": "Are salaried employees exempt from overtime pay?"
     },
     {
       "question": "What is the minimum wage for tipped workers?",

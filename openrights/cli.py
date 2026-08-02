@@ -7,7 +7,7 @@ from pathlib import Path
 from .ingest import ingest
 from .generator import build_prompt, generate
 from .benchmark import run as run_benchmark, save as save_benchmark
-from .rag import TfidfIndex, is_on_subject
+from .rag import TfidfIndex, is_on_subject, EVIDENCE_TERMS
 from .serve import serve
 from .bundle import build as build_bundle
 from .web import export_web
@@ -20,16 +20,58 @@ ROOT = Path(__file__).resolve().parents[1]
 ANSWER_FLOOR = 0.35
 
 
+def shown_results(index: TfidfIndex, question: str) -> list[dict]:
+    """The results the interface would actually present, in order.
+
+    Scoring the raw top of the index would measure something no user sees: the
+    interface keeps at most one plain-language answer, and only cites statute
+    text that is on the subject asked about.
+    """
+    hits = [hit for hit in index.search(question, 40) if hit["score"] > 0]
+    answer = next(
+        (
+            hit
+            for hit in hits
+            if hit.get("kind") == "plain"
+            and hit["score"] >= ANSWER_FLOOR
+            and is_on_subject(question, hit["text"], index.idf)
+        ),
+        None,
+    )
+    evidence = [
+        hit
+        for hit in hits
+        if hit.get("kind") != "plain"
+        and is_on_subject(question, hit["text"], index.idf, EVIDENCE_TERMS)
+    ]
+    return ([answer] if answer else []) + evidence
+
+
 def ask(question: str, top_k: int, model: str | None) -> None:
     index = TfidfIndex.load(ROOT / "data/processed/index.json")
-    results = index.search(question, top_k)
+    # The same filtering the interface applies. Printing the raw top of the
+    # index here would make the CLI answer questions the app declines: "can my
+    # landlord raise the rent" matches a payroll-deduction answer at 0.53 on
+    # sentence shape alone.
+    results = shown_results(index, question)[:top_k]
     if model:
         print(generate(Path(model), build_prompt(question, results)))
         return
-    print("\nRetrieval-only answer (verify the source and jurisdiction):\n")
+    if not results:
+        print("\nNothing in this archive covers that question.\n")
+        return
+    if results[0].get("kind") != "plain":
+        print("\nNo plain-language answer covers this yet. Closest text in the law:\n")
+    else:
+        print("\nAnswer (verify the source and your jurisdiction):\n")
     for number, result in enumerate(results, 1):
         print(f"[{number}] {result['source']} | score={result['score']}")
-        print(result["text"])
+        if result.get("heading"):
+            print(result["heading"])
+        # "text" is the search representation, which repeats the question line
+        # for weighting. Printing it verbatim shows the same sentence four
+        # times. "body" is the part written to be read.
+        print(result.get("body") or result["text"])
         print(f"Source: {result['url']}\n")
 
 
@@ -43,11 +85,7 @@ def evaluate() -> None:
         # Score what the interface would actually present. An off-subject
         # plain-language answer is filtered out before display, so counting it
         # here would measure the index rather than the product.
-        results = [
-            r
-            for r in index.search(question, 8)
-            if r.get("kind") != "plain" or is_on_subject(question, r["text"], index.idf)
-        ][:3]
+        results = shown_results(index, question)[:3]
         # A plain-language answer is filed under its topic ("Wages and
         # overtime") but names the statute it summarises. Either satisfies an
         # expectation of that statute: the answer does come from that law.

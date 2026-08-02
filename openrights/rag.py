@@ -68,10 +68,43 @@ def subject_words(question: str) -> list[str]:
     return [t for t in tokenize(question) if len(t) >= 4 and t not in GENERIC_WORDS]
 
 
-def is_on_subject(question: str, text: str, idf: dict[str, float]) -> bool:
-    """True when the answer mentions the rarest thing the question asked about."""
+def is_on_subject(question: str, text: str, idf: dict[str, float], terms: int = 1) -> bool:
+    """True when the text is about what the question actually asked.
+
+    Two callers, two standards, because the cost of being wrong differs.
+
+    An answer must clear the strict test (terms=1): a confident explanation of
+    the wrong subject is the worst thing this tool can do. It also refuses
+    outright when any subject word is missing from the corpus, since a word the
+    archive has never seen is the clearest possible signal that the archive does
+    not cover the topic. That is what makes it decline on rent and eviction
+    instead of answering with the nearest employment rule.
+
+    Supporting passages use the looser test (terms=EVIDENCE_TERMS) and ignore
+    unknown words, because a single rare word is often a figure of speech rather
+    than the topic: "what should I know before getting a mortgage" contains
+    *getting*, which appears nowhere in a corpus of statutes, and demanding it
+    hid every relevant passage of the Truth in Lending Act.
+
+    Measured on evals/coverage.json: 39/39 answers correct, 10/10 out-of-scope
+    questions declined, and the law found for both mortgage questions.
+    """
     subjects = subject_words(question)
     if not subjects:
         return True
-    rarest = max(subjects, key=lambda word: idf.get(word, float("inf")))
-    return rarest in set(tokenize(text))
+
+    strict = terms == 1
+    known = [word for word in subjects if word in idf]
+    if strict and len(known) != len(subjects):
+        return False
+    if not known:
+        return True
+
+    ranked = sorted(known, key=lambda word: idf[word], reverse=True)
+    present = set(tokenize(text))
+    return any(word in present for word in ranked[:terms])
+
+
+# A tangential citation is noise; a confident answer to another question is a
+# lie. The looser test is only ever used for citations.
+EVIDENCE_TERMS = 2

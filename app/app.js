@@ -12,12 +12,28 @@ function subjectWords(question) {
   return words(question).filter((word) => word.length >= 4 && !GENERIC_WORDS.has(word));
 }
 
-function onSubject(question, text, idf) {
+// Two callers, two standards, because the cost of being wrong differs. An
+// answer must clear the strict test, and refuses outright when a subject word
+// is missing from the corpus: a word the archive has never seen is the
+// clearest signal it does not cover the topic, which is what makes this
+// decline on rent and eviction instead of answering with an employment rule.
+// Citations use the looser test and ignore unknown words, because one rare
+// word is often a figure of speech rather than the topic: "getting a mortgage"
+// contains *getting*, absent from every statute, and demanding it hid all of
+// the Truth in Lending Act.
+const EVIDENCE_TERMS = 2;
+
+function onSubject(question, text, idf, terms = 1) {
   const subjects = subjectWords(question);
   if (!subjects.length) return true;
-  const weight = (word) => (idf[word] === undefined ? Infinity : idf[word]);
-  const rarest = subjects.reduce((best, word) => (weight(word) > weight(best) ? word : best), subjects[0]);
-  return new Set(words(text)).has(rarest);
+
+  const known = subjects.filter((word) => idf[word] !== undefined);
+  if (terms === 1 && known.length !== subjects.length) return false;
+  if (!known.length) return true;
+
+  const ranked = [...known].sort((a, b) => idf[b] - idf[a]).slice(0, terms);
+  const present = new Set(words(text));
+  return ranked.some((word) => present.has(word));
 }
 
 const words = (text) => text.toLowerCase().match(TOKEN) || [];
@@ -141,9 +157,9 @@ function showResults(question) {
     return;
   }
 
-  const hits = search(question, 14).filter((hit) => hit.score > 0);
+  const hits = search(question, 40).filter((hit) => hit.score > 0);
   if (!hits.length) {
-    container.innerHTML = '<div class="empty">No matching passage in this archive. Try different words.</div>';
+    container.innerHTML = '<div class="empty">Nothing in this archive matches that. Try different words.</div>';
     return;
   }
 
@@ -155,15 +171,23 @@ function showResults(question) {
       && hit.score >= ANSWER_FLOOR
       && onSubject(question, hit.chunk.text, state.idf)
   );
-  const passages = hits.filter((hit) => hit !== answer).slice(0, 4);
+  // Evidence is the law itself. Another plain-language answer is not evidence,
+  // and an off-subject passage is noise dressed as a citation: a question about
+  // a mortgage was being "supported" by the child labor rules.
+  const passages = hits
+    .filter((hit) => hit.chunk.kind !== "plain" && onSubject(question, hit.chunk.text, state.idf, EVIDENCE_TERMS))
+    .slice(0, 4);
 
   if (answer) {
     container.appendChild(answerCard(answer, question));
-  } else {
+  } else if (passages.length) {
     const notice = document.createElement("div");
     notice.className = "empty";
     notice.textContent = "No plain-language answer covers this yet. Here is the closest text in the law.";
     container.appendChild(notice);
+  } else {
+    container.innerHTML = '<div class="empty">This archive does not cover that topic yet. It covers pay and overtime, losing a job, family and medical leave, workplace safety, debt collection, credit reports, and workplace discrimination.</div>';
+    return;
   }
 
   if (!passages.length) return;

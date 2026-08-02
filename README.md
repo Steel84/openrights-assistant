@@ -29,8 +29,8 @@ Source: https://www.govinfo.gov/content/pkg/USCODE-2023-title29/...
 - **Fully offline** after a one-time source download
 - **Zero dependencies** beyond Python standard library
 - **8 official sources**: labor law, consumer protection, workplace safety, discrimination, finance
-- **44 plain-language answers** across wages, dismissal, leave, safety, debt, and discrimination
-- **32 retrieval checks, 44 answer checks, and 10 must-decline checks**, run on every commit
+- **46 plain-language answers** across wages, dismissal, leave, safety, debt, credit reports, and discrimination
+- **32 retrieval checks, 39 answer checks, and 10 must-decline checks**, run on every commit
 - **Mobile-ready**: PWA with service worker + Android WebView APK
 - **< 4ms** average query latency
 - **< 500 KB** phone archive size
@@ -46,7 +46,7 @@ python -m pip install -e .
 python -m openrights ingest        # download official sources, build index
 python -m openrights ask "What is the minimum wage?"
 python -m openrights evaluate       # 32 retrieval checks
-python -m openrights coverage       # 44 answer checks + 10 must-decline checks
+python -m openrights coverage       # 39 answer checks + 10 must-decline checks
 python -m openrights benchmark      # measure latency and memory
 ```
 
@@ -91,17 +91,20 @@ For a native Android APK: see [RUNNING.md](RUNNING.md).
 
 ## Measured performance
 
+From `python -m openrights benchmark`, on a development machine rather than a
+phone. The archive grew when the plain-language answers were added.
+
 | Metric | Value |
 | --- | --- |
 | Sources | 8 official government sources |
-| Plain-language answers | 44 |
-| Indexed statute passages | 1,100+ |
+| Plain-language answers | 46 |
+| Indexed statute passages | 1,144 |
 | Retrieval accuracy | 32/32 |
-| Answer coverage | 44/44 |
-| Query latency | ~3.8 ms |
-| Index RAM | < 1 MB |
-| Phone archive | ~500 KB |
-| Install size (no model) | < 5 MB |
+| Answer coverage | 39/39 |
+| Query latency | ~17 ms |
+| Index RAM | ~13 MB |
+| Phone archive | 1.8 MB |
+| Install size (no model) | ~2 MB |
 | External dependencies | 0 |
 
 ## Documentation

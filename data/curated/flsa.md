@@ -8,10 +8,12 @@ Most employees must be paid **one and a half times their regular rate** for ever
 
 The workweek is a fixed, recurring period of 168 hours. Averaging hours across two weeks to avoid overtime is not allowed.
 
-## Who is exempt from overtime pay?
-Executive, administrative, professional, and outside sales employees can be exempt, but only if they meet **both a salary test and a duties test**.
+## Are salaried employees exempt from overtime pay?
+Being salaried does **not** by itself make you exempt. Many salaried workers are still owed overtime.
 
-A job title alone never decides this. What matters is what the work actually involves and how the employee is paid.
+An employee is exempt only when they meet **both a salary test and a duties test**: paid above the salary threshold, and doing genuinely executive, administrative, professional, or outside sales work.
+
+A job title alone never decides this. What matters is what the work actually involves and how the person is paid.
 
 ## What is the minimum wage for tipped employees?
 An employer may pay a cash wage as low as **$2.13 per hour** if tips bring the total to at least **$7.25 per hour**.

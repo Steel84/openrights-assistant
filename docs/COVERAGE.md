@@ -16,7 +16,7 @@ question, it says so rather than presenting an excerpt as if it were an answer.
 
 ## What is covered today
 
-44 plain-language answers across seven topics:
+46 plain-language answers across seven topics:
 
 | Topic | Answers | Covers |
 | --- | --- | --- |
@@ -46,7 +46,7 @@ largest gaps, in rough order of how often people hit them:
 - Small claims procedure
 - Family law
 
-`python -m openrights coverage` checks both halves: that 44 questions reach the
+`python -m openrights coverage` checks both halves: that 39 questions reach the
 right answer, and that 10 questions from the gap list above are **declined**
 rather than answered.
 
@@ -99,7 +99,7 @@ python -m openrights export-web
 
 ## Scaling this
 
-Writing 44 answers took a few hours. The work is legal summarisation, not
+Writing 46 answers took a few hours. The work is legal summarisation, not
 engineering, and it is the part that decides whether the tool helps anyone.
 
 This is deliberate for the first release: hand-written answers are auditable,
