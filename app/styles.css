@@ -45,7 +45,7 @@ h2 { margin:0; font-size:clamp(38px,7vw,76px); line-height:.93; letter-spacing:-
 .lede { max-width:580px; margin:24px 0 34px; color:var(--muted); font:16px/1.55 Arial,sans-serif; }
 .searchbox { background:var(--card); border:1px solid var(--line); padding:18px; box-shadow:8px 8px 0 var(--shadow); border-radius:4px; }
 .searchbox label { display:block; margin-bottom:10px; font:700 12px Arial,sans-serif; color:var(--muted); }
-.inputrow { display:flex; gap:10px; }
+.inputrow { display:flex; gap:10px; position:relative; align-items:flex-start; }
 textarea { display:block; width:100%; min-width:0; flex:1; border:0; border-bottom:2px solid var(--ink); outline:0; padding:10px 4px; background:transparent; color:var(--ink); font:clamp(16px,4.2vw,20px)/1.4 Georgia,serif; resize:none; overflow:hidden; transition:border-color .2s; -webkit-appearance:none; appearance:none; border-radius:0; touch-action:manipulation; user-select:text; -webkit-user-select:text; pointer-events:auto; }
 textarea:focus { border-color:var(--accent); }
 textarea::placeholder { font-size:15px; color:var(--muted); opacity:1; overflow:hidden; text-overflow:ellipsis; }
@@ -116,3 +116,6 @@ mark { background:var(--mark); color:var(--ink); padding:1px 3px; border-radius:
   .answer h3 { font-size:22px; }
   .answer p { font-size:16px; }
 }
+
+.clearbtn { position:absolute; right:8px; top:50%; transform:translateY(-50%); width:28px; height:28px; background:var(--line); color:var(--muted); border-radius:50%; font-size:14px; display:none; align-items:center; justify-content:center; padding:0; line-height:1; }
+.clearbtn:hover { background:var(--accent); color:white; }

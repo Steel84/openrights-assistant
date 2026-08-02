@@ -237,6 +237,20 @@ function fitToContent() {
 
 questionField.addEventListener("input", fitToContent);
 
+// Clear button
+const clearBtn = document.querySelector("#clearBtn");
+function updateClearBtn() {
+  clearBtn.style.display = questionField.value.trim() ? "flex" : "none";
+}
+clearBtn.addEventListener("click", () => {
+  questionField.value = "";
+  fitToContent();
+  updateClearBtn();
+  questionField.focus();
+});
+questionField.addEventListener("input", updateClearBtn);
+
+
 // Enter searches, as it would in a single-line field. A question is never
 // multi-paragraph, but leave Shift+Enter for anyone who wants a break.
 questionField.addEventListener("keydown", (event) => {
