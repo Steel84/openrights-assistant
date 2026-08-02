@@ -7,7 +7,6 @@ name = "openrights-assistant"
 version = "0.2.0"
 description = "Offline-first retrieval assistant for public legal and consumer-protection sources"
 requires-python = ">=3.10"
-license = "Apache-2.0"
 readme = "README.md"
 keywords = ["legal", "offline", "RAG", "retrieval", "consumer-rights", "labor-law"]
 classifiers = [
