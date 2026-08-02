@@ -1,4 +1,4 @@
-const CACHE_NAME = 'openrights-v10';
+const CACHE_NAME = 'openrights-v11';
 const ASSETS = [
   './',
   './index.html',
