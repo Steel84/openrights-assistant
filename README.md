@@ -29,7 +29,8 @@ Source: https://www.govinfo.gov/content/pkg/USCODE-2023-title29/...
 - **Fully offline** after a one-time source download
 - **Zero dependencies** beyond Python standard library
 - **8 official sources**: labor law, consumer protection, workplace safety, discrimination, finance
-- **32 evaluation questions** with 100% retrieval accuracy
+- **44 plain-language answers** across wages, dismissal, leave, safety, debt, and discrimination
+- **32 retrieval checks and 39 coverage checks**, run on every commit
 - **Mobile-ready**: PWA with service worker + Android WebView APK
 - **< 4ms** average query latency
 - **< 500 KB** phone archive size
@@ -44,7 +45,8 @@ cd openrights-assistant
 python -m pip install -e .
 python -m openrights ingest        # download official sources, build index
 python -m openrights ask "What is the minimum wage?"
-python -m openrights evaluate       # run 32-question eval set
+python -m openrights evaluate       # 32 retrieval checks
+python -m openrights coverage       # 44 answer checks + 10 must-decline checks
 python -m openrights benchmark      # measure latency and memory
 ```
 
@@ -80,7 +82,8 @@ For a native Android APK: see [RUNNING.md](RUNNING.md).
 | `ingest` | Download sources and build the search index |
 | `ask "..."` | Search for relevant passages |
 | `ask --model path.gguf "..."` | Search + generate answer with local LLM |
-| `evaluate` | Run the full evaluation set |
+| `evaluate` | Check that the right source is retrieved |
+| `coverage` | Check that a question reaches a plain-language answer |
 | `benchmark` | Measure latency, memory, archive size |
 | `export-web` | Build phone archive in app/data/ |
 | `bundle` | Build single-file demo in dist/ |
@@ -91,8 +94,10 @@ For a native Android APK: see [RUNNING.md](RUNNING.md).
 | Metric | Value |
 | --- | --- |
 | Sources | 8 official government sources |
-| Indexed passages | 300+ |
-| Eval accuracy | 32/32 (100%) |
+| Plain-language answers | 44 |
+| Indexed statute passages | 1,100+ |
+| Retrieval accuracy | 32/32 |
+| Answer coverage | 44/44 |
 | Query latency | ~3.8 ms |
 | Index RAM | < 1 MB |
 | Phone archive | ~500 KB |
@@ -109,6 +114,7 @@ For a native Android APK: see [RUNNING.md](RUNNING.md).
 - [GRANT_DRAFT.md](GRANT_DRAFT.md) - Grant application
 - [GRANT_READINESS.md](GRANT_READINESS.md) - Readiness checklist
 - [docs/MULTI_JURISDICTION.md](docs/MULTI_JURISDICTION.md) - Expansion roadmap
+- [docs/COVERAGE.md](docs/COVERAGE.md) - What the archive answers, and what it does not
 - [docs/IMPACT.md](docs/IMPACT.md) - Impact measurement framework
 
 ## Roadmap

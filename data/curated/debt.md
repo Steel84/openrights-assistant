@@ -1,4 +1,5 @@
 ## When can a debt collector contact me?
+Also asked: call me at work, what hours, times of day, contact at my job
 Not at an inconvenient time or place. Generally **not before 8 a.m. or after 9 p.m.**, and **not at work** if the collector knows your employer forbids it.
 
 ## How do I stop a debt collector from contacting me?
@@ -6,7 +7,8 @@ Send a **written letter** telling them to stop. Once they receive it, they may o
 
 Keep a copy and send it so delivery can be proven.
 
-## What conduct is a debt collector banned from?
+## Can a debt collector threaten or harass me?
+Also asked: threaten me, threats, harassment, abusive, swearing, calling repeatedly, intimidation
 No harassment, oppression, or abuse: **no threats of violence**, no obscene language, no repeated calls meant to annoy, and no publishing your name as someone who refuses to pay.
 
 ## Can a debt collector lie to me?

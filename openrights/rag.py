@@ -54,3 +54,24 @@ class TfidfIndex:
     def load(cls, path: Path) -> "TfidfIndex":
         payload = json.loads(path.read_text(encoding="utf-8"))
         return cls(payload["chunks"], payload["idf"])
+
+# Cosine similarity rewards sentence shape. "Can my landlord raise the rent?"
+# scored 0.63 against "Can my employer change my schedule?" on "can my" alone,
+# while landlord and rent appeared nowhere in the answer. A confident answer to
+# a question about something else is the worst failure this tool can have, so
+# the subject of the question has to actually be in the answer.
+GENERIC_WORDS = frozenset("""what when where which while about have does can the are from with without and get how been being same other their there they this that these those your not all any some more most much many into over under than then such only own just also need want should would could will shall""".split())
+
+
+def subject_words(question: str) -> list[str]:
+    """The words that carry what the question is about."""
+    return [t for t in tokenize(question) if len(t) >= 4 and t not in GENERIC_WORDS]
+
+
+def is_on_subject(question: str, text: str, idf: dict[str, float]) -> bool:
+    """True when the answer mentions the rarest thing the question asked about."""
+    subjects = subject_words(question)
+    if not subjects:
+        return True
+    rarest = max(subjects, key=lambda word: idf.get(word, float("inf")))
+    return rarest in set(tokenize(text))

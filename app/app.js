@@ -1,5 +1,24 @@
 const state = { chunks: [], idf: {}, ready: false };
 const TOKEN = /[a-z0-9][a-z0-9'-]{1,}/g;
+const ANSWER_FLOOR = 0.35;
+// Cosine similarity rewards sentence shape. "Can my landlord raise the rent?"
+// scored 0.63 against "Can my employer change my schedule?" on "can my" alone,
+// while landlord and rent appeared nowhere in the answer. A confident answer to
+// a different question is the worst failure this tool can have, so the subject
+// of the question has to actually appear in the answer.
+const GENERIC_WORDS = new Set("what when where which while about have does can the are from with without and get how been being same other their there they this that these those your not all any some more most much many into over under than then such only own just also need want should would could will shall".split(" "));
+
+function subjectWords(question) {
+  return words(question).filter((word) => word.length >= 4 && !GENERIC_WORDS.has(word));
+}
+
+function onSubject(question, text, idf) {
+  const subjects = subjectWords(question);
+  if (!subjects.length) return true;
+  const weight = (word) => (idf[word] === undefined ? Infinity : idf[word]);
+  const rarest = subjects.reduce((best, word) => (weight(word) > weight(best) ? word : best), subjects[0]);
+  return new Set(words(text)).has(rarest);
+}
 
 const words = (text) => text.toLowerCase().match(TOKEN) || [];
 
@@ -89,7 +108,9 @@ function answerCard(hit, question) {
   const { chunk } = hit;
   const parsed = splitHeading(chunk.text);
   const heading = chunk.heading || parsed.heading;
-  const body = chunk.heading ? chunk.text.slice(chunk.text.indexOf("\n")).trim() : parsed.body;
+  // chunk.text is the search representation: the question repeated for weight,
+  // plus alias phrasings. chunk.body is what a person should actually read.
+  const body = chunk.body || parsed.body;
   const card = document.createElement("article");
   card.className = "answer";
   card.innerHTML = `
@@ -126,7 +147,14 @@ function showResults(question) {
     return;
   }
 
-  const answer = hits.find((hit) => hit.chunk.kind === "plain");
+  // A weak plain-language match is worse than none: it reads as an
+  // authoritative answer to a question it does not cover. Below the floor,
+  // fall back to showing the law and saying so.
+  const answer = hits.find(
+    (hit) => hit.chunk.kind === "plain"
+      && hit.score >= ANSWER_FLOOR
+      && onSubject(question, hit.chunk.text, state.idf)
+  );
   const passages = hits.filter((hit) => hit !== answer).slice(0, 4);
 
   if (answer) {

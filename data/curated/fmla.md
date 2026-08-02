@@ -1,9 +1,11 @@
 ## How much family and medical leave can I take?
+Also asked: how many weeks, duration, 12 weeks, how long
 An eligible employee may take up to **12 workweeks of unpaid, job-protected leave** in a 12-month period.
 
 Leave to care for a covered servicemember with a serious injury extends to **26 workweeks**.
 
 ## Who is eligible for family and medical leave?
+Also asked: do I qualify, eligibility requirements, am I covered, 1250 hours, 12 months of service, 50 employees
 You qualify if you have worked for the employer **at least 12 months**, logged **at least 1,250 hours** in the previous 12 months, and work at a site with **50 or more employees within 75 miles**.
 
 ## What reasons qualify for family and medical leave?

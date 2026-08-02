@@ -5,7 +5,7 @@ from pathlib import Path
 
 WEB_KEYS = ("id", "source", "url", "text", "kind")
 # Present only on plain-language answers, absent on raw statute passages.
-WEB_OPTIONAL_KEYS = ("heading", "statute")
+WEB_OPTIONAL_KEYS = ("heading", "statute", "body")
 
 
 def payload_for_web(payload: dict) -> dict:

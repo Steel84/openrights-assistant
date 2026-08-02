@@ -98,6 +98,16 @@ PLAIN_SOURCES = {
         "Fair Debt Collection Practices Act",
         "https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap41-subchapV.htm",
     ),
+    "credit": (
+        "Credit reports",
+        "Fair Credit Reporting Act",
+        "https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap41-subchapIII.htm",
+    ),
+    "termination": (
+        "Losing a job",
+        "Civil Rights Act Title VII and the WARN Act",
+        "https://www.govinfo.gov/content/pkg/USCODE-2023-title42/html/USCODE-2023-title42-chap21-subchapVI.htm",
+    ),
     "discrimination": (
         "Workplace discrimination",
         "Civil Rights Act Title VII",
@@ -106,22 +116,38 @@ PLAIN_SOURCES = {
 }
 
 
-def split_sections(text: str) -> list[tuple[str, str]]:
-    """Split a plain-language file into (heading, body) pairs."""
-    sections: list[tuple[str, str]] = []
+ALSO_ASKED = "Also asked:"
+HEADING_WEIGHT = 4
+ALIAS_WEIGHT = 3
+
+
+def split_sections(text: str) -> list[tuple[str, str, str]]:
+    """Split a plain-language file into (heading, aliases, body) triples.
+
+    A line beginning with "Also asked:" holds alternative phrasings. Sibling
+    answers share most of their heading ("Can I be fired without a reason?" and
+    "...without notice?"), so the shared words outweigh the one that tells them
+    apart. Aliases give the distinguishing phrasing something to match on. They
+    are indexed, never displayed.
+    """
+    sections: list[tuple[str, str, str]] = []
     heading = None
+    aliases = ""
     body: list[str] = []
     for line in text.splitlines():
         if line.startswith("## "):
             if heading:
-                sections.append((heading, "\n".join(body).strip()))
+                sections.append((heading, aliases, "\n".join(body).strip()))
             heading = line[3:].strip()
+            aliases = ""
             body = []
+        elif heading and line.strip().startswith(ALSO_ASKED):
+            aliases = line.strip()[len(ALSO_ASKED):].strip()
         elif heading:
             body.append(line)
     if heading:
-        sections.append((heading, "\n".join(body).strip()))
-    return [(h, b) for h, b in sections if b]
+        sections.append((heading, aliases, "\n".join(body).strip()))
+    return [(h, a, b) for h, a, b in sections if b]
 
 
 def load_plain_answers(root: Path) -> list[dict]:
@@ -133,16 +159,26 @@ def load_plain_answers(root: Path) -> list[dict]:
         topic, statute, url = PLAIN_SOURCES.get(
             path.stem, (path.stem.title(), path.stem.upper(), "")
         )
-        for number, (heading, body) in enumerate(split_sections(path.read_text(encoding="utf-8"))):
+        for number, (heading, aliases, body) in enumerate(split_sections(path.read_text(encoding="utf-8"))):
             answers.append({
                 "id": f"plain-{path.stem}:{number}",
                 "source": topic,
                 "statute": statute,
                 "heading": heading,
+                "body": body,
                 "url": url,
                 # The heading is indexed with the body: users search in the words
                 # of the question they are asking, not the words of the statute.
-                "text": f"{heading}\n\n{body}",
+                # The heading is the question this answer exists to settle, so
+                # it carries more signal than any sentence in the body. Sibling
+                # answers otherwise differ by a single word and the longer body
+                # decides the match. Repeating the question line weights it
+                # without needing a second scoring pass.
+                "text": "\n\n".join(
+                    part
+                    for part in ([heading] * HEADING_WEIGHT + [aliases] * ALIAS_WEIGHT + [body])
+                    if part
+                ),
                 "jurisdiction": "US",
                 "kind": "plain",
             })

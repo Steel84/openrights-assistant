@@ -1,0 +1,172 @@
+{
+  "covered": [
+    {
+      "question": "What is the federal minimum wage?",
+      "expected_heading": "What is the federal minimum wage?"
+    },
+    {
+      "question": "How is overtime pay calculated?",
+      "expected_heading": "How is overtime pay calculated?"
+    },
+    {
+      "question": "Can my employer require me to work overtime?",
+      "expected_heading": "Can my employer make me work overtime?"
+    },
+    {
+      "question": "Who is exempt from overtime?",
+      "expected_heading": "Who is exempt from overtime pay?"
+    },
+    {
+      "question": "What is the minimum wage for tipped workers?",
+      "expected_heading": "What is the minimum wage for tipped employees?"
+    },
+    {
+      "question": "Do part-time workers have the same rights as full-time workers?",
+      "expected_heading": "Do part-time workers have the same rights as full-time workers?"
+    },
+    {
+      "question": "Am I entitled to a lunch break?",
+      "expected_heading": "Am I entitled to breaks or a lunch period?"
+    },
+    {
+      "question": "When do I get my final paycheck after quitting?",
+      "expected_heading": "When must I receive my final paycheck after leaving a job?"
+    },
+    {
+      "question": "Can my employer cut my hours without telling me?",
+      "expected_heading": "Can my employer change my schedule or cut my hours without notice?"
+    },
+    {
+      "question": "Am I an employee or an independent contractor?",
+      "expected_heading": "Can I be paid as an independent contractor instead of an employee?"
+    },
+    {
+      "question": "Can my employer deduct money from my paycheck?",
+      "expected_heading": "Can my employer deduct money from my paycheck?"
+    },
+    {
+      "question": "My employer has not paid me, what can I do?",
+      "expected_heading": "What can I do if my employer has not paid me?"
+    },
+    {
+      "question": "What wage records must my employer keep?",
+      "expected_heading": "What wage and hour records must an employer keep?"
+    },
+    {
+      "question": "What are the rules on child labor?",
+      "expected_heading": "What are the rules on child labor?"
+    },
+    {
+      "question": "Does the law require equal pay for equal work?",
+      "expected_heading": "Does the law require equal pay for equal work?"
+    },
+    {
+      "question": "Can I be fired without a reason?",
+      "expected_heading": "Can I be fired without a reason?"
+    },
+    {
+      "question": "Can I be fired without notice?",
+      "expected_heading": "Can I be fired without a reason?"
+    },
+    {
+      "question": "Can I be fired for complaining about my employer?",
+      "expected_heading": "Can I be fired for complaining about my employer?"
+    },
+    {
+      "question": "Am I owed unused vacation pay when I leave?",
+      "expected_heading": "Am I owed unused vacation pay when I leave?"
+    },
+    {
+      "question": "How much family and medical leave can I take?",
+      "expected_heading": "How much family and medical leave can I take?"
+    },
+    {
+      "question": "Can I take unpaid leave for a family emergency?",
+      "expected_heading": "How much family and medical leave can I take?"
+    },
+    {
+      "question": "Who is eligible for family and medical leave?",
+      "expected_heading": "Who is eligible for family and medical leave?"
+    },
+    {
+      "question": "Does my employer have to hold my job during medical leave?",
+      "expected_heading": "Does my employer have to hold my job during leave?"
+    },
+    {
+      "question": "What happens to my health insurance during leave?",
+      "expected_heading": "What happens to my health insurance during leave?"
+    },
+    {
+      "question": "Do I have a right to a safe workplace?",
+      "expected_heading": "Do I have a right to a safe workplace?"
+    },
+    {
+      "question": "Can I refuse dangerous work?",
+      "expected_heading": "Can I refuse dangerous or unsafe work?"
+    },
+    {
+      "question": "How do I file a workplace safety complaint?",
+      "expected_heading": "How do I file a workplace safety complaint?"
+    },
+    {
+      "question": "Can my employer punish me for reporting a safety problem?",
+      "expected_heading": "Can my employer punish me for reporting a safety problem?"
+    },
+    {
+      "question": "When can a debt collector contact me?",
+      "expected_heading": "When can a debt collector contact me?"
+    },
+    {
+      "question": "Can a debt collector call me at work?",
+      "expected_heading": "When can a debt collector contact me?"
+    },
+    {
+      "question": "How do I stop a debt collector from contacting me?",
+      "expected_heading": "How do I stop a debt collector from contacting me?"
+    },
+    {
+      "question": "Can a debt collector threaten me?",
+      "expected_heading": "Can a debt collector threaten or harass me?"
+    },
+    {
+      "question": "Can a debt collector lie about what I owe?",
+      "expected_heading": "Can a debt collector lie to me?"
+    },
+    {
+      "question": "How do I dispute a debt?",
+      "expected_heading": "How do I dispute a debt?"
+    },
+    {
+      "question": "What types of employment discrimination are illegal?",
+      "expected_heading": "What types of employment discrimination are illegal?"
+    },
+    {
+      "question": "What counts as workplace harassment?",
+      "expected_heading": "What counts as workplace harassment?"
+    },
+    {
+      "question": "Must my employer accommodate my disability?",
+      "expected_heading": "Must my employer accommodate a disability or my religion?"
+    },
+    {
+      "question": "How do I file a discrimination charge?",
+      "expected_heading": "How do I file a discrimination charge?"
+    },
+    {
+      "question": "Do I get severance pay when I am laid off?",
+      "expected_heading": "Do I get notice or severance pay before being fired?"
+    }
+  ],
+  "not_covered": [
+    "What should I know before getting a mortgage?",
+    "How do I fight an eviction?",
+    "How do I apply for unemployment benefits?",
+    "Can I sue in small claims court?",
+    "What is a warranty on a product?",
+    "How do I get a divorce?",
+    "What are my rights as a tenant?",
+    "Can my landlord raise the rent?",
+    "How do I file for bankruptcy?",
+    "Do I need a visa to work here?"
+  ]
+}
