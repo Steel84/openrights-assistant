@@ -1,4 +1,4 @@
-# Sentient Foundation Grant Application
+# Grant Application
 ## OpenRights Assistant: Offline Legal Information for Everyone
 
 ---
@@ -139,9 +139,9 @@ User question
 
 ---
 
-## Alignment with Sentient Foundation Goals
+## Alignment with Grant Criteria
 
-Our system directly implements the spirit of offline, open-source AI for underserved populations: preserving and making accessible knowledge that would otherwise be locked behind connectivity, cost, or complexity barriers. Legal rights are knowledge that every person in a jurisdiction should be able to access in their own language, on their own device, without gatekeepers.
+Our system implements the spirit of offline, open-source AI for underserved populations: preserving and making accessible knowledge that would otherwise be locked behind connectivity, cost, or complexity barriers. Legal rights are knowledge that every person in a jurisdiction should be able to access in their own language, on their own device, without gatekeepers.
 
 | Criterion | How we meet it |
 | --- | --- |

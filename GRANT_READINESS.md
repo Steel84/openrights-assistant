@@ -1,6 +1,6 @@
 # Grant Readiness Matrix
 
-Honest status of each Sentient Foundation requirement as of the latest commit.
+Honest status of each grant requirement as of the latest commit.
 
 ## Core Requirements
 
@@ -40,4 +40,4 @@ Honest status of each Sentient Foundation requirement as of the latest commit.
 2. Record 60-second demo video following DEMO_SCRIPT.md.
 3. (Optional) Run LLM on a budget Android phone and add timing to benchmarks.
 4. Make repository public if still private.
-5. Submit application via sentient.foundation/grants.
+5. Submit the grant application.

@@ -2,7 +2,7 @@
 
 ## Why measure impact
 
-The Sentient Foundation grant evaluates projects on real-world utility for underserved populations. This document defines how we will measure whether OpenRights Assistant actually helps people.
+Grant programs evaluate projects on real-world utility for underserved populations. This document defines how we will measure whether OpenRights Assistant actually helps people.
 
 ## Metrics
 

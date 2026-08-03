@@ -43,7 +43,7 @@ OpenRights Assistant is designed as a modular offline-first information retrieva
 | 450-word chunks with 60-word overlap | Balances context length vs. retrieval precision |
 | JS assignment instead of fetch | WebView file:// origin blocks fetch(); script tags work |
 | Optional LLM | Retrieval alone is useful; generation adds value but requires more resources |
-| Apache 2.0 | Compatible with Sentient ecosystem and most open-source models |
+| Apache 2.0 | Compatible with all major open-source AI ecosystems |
 
 ## Resource budget (target)
 
