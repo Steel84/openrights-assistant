@@ -1,9 +1,13 @@
 from __future__ import annotations
 
 import socket
+import sys
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+
+# Ports reserved for other services on this server (Docker WordPress, etc.)
+RESERVED_PORTS = {80, 443, 8080}
 
 
 def lan_address() -> str | None:
@@ -17,6 +21,10 @@ def lan_address() -> str | None:
 
 
 def serve(root: Path, port: int = 8000) -> None:
+    if port in RESERVED_PORTS:
+        print(f"ERROR: port {port} is reserved (used by web-agregator.ru / Caddy / Docker).")
+        print("Use --port 8090 for dev or --port 8000 (default) for local demo.")
+        sys.exit(1)
     if not (root / "app/data/index.js").exists():
         raise SystemExit("Archive not exported. Run: python -m openrights ingest && python -m openrights export-web")
     handler = partial(SimpleHTTPRequestHandler, directory=str(root))

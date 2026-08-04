@@ -1,36 +1,20 @@
 const state = { chunks: [], idf: {}, ready: false };
 const TOKEN = /[a-z0-9][a-z0-9'-]{1,}/g;
 const ANSWER_FLOOR = 0.35;
-// Cosine similarity rewards sentence shape. "Can my landlord raise the rent?"
-// scored 0.63 against "Can my employer change my schedule?" on "can my" alone,
-// while landlord and rent appeared nowhere in the answer. A confident answer to
-// a different question is the worst failure this tool can have, so the subject
-// of the question has to actually appear in the answer.
 const GENERIC_WORDS = new Set("what when where which while about have does can the are from with without and get how been being same other their there they this that these those your not all any some more most much many into over under than then such only own just also need want should would could will shall".split(" "));
 
 function subjectWords(question) {
   return words(question).filter((word) => word.length >= 4 && !GENERIC_WORDS.has(word));
 }
 
-// Two callers, two standards, because the cost of being wrong differs. An
-// answer must clear the strict test, and refuses outright when a subject word
-// is missing from the corpus: a word the archive has never seen is the
-// clearest signal it does not cover the topic, which is what makes this
-// decline on rent and eviction instead of answering with an employment rule.
-// Citations use the looser test and ignore unknown words, because one rare
-// word is often a figure of speech rather than the topic: "getting a mortgage"
-// contains *getting*, absent from every statute, and demanding it hid all of
-// the Truth in Lending Act.
 const EVIDENCE_TERMS = 2;
 
 function onSubject(question, text, idf, terms = 1) {
   const subjects = subjectWords(question);
   if (!subjects.length) return true;
-
   const known = subjects.filter((word) => idf[word] !== undefined);
   if (terms === 1 && known.length !== subjects.length) return false;
   if (!known.length) return true;
-
   const ranked = [...known].sort((a, b) => idf[b] - idf[a]).slice(0, terms);
   const present = new Set(words(text));
   return ranked.some((word) => present.has(word));
@@ -56,7 +40,6 @@ function norm(vec) {
   return Math.sqrt(total) || 1;
 }
 
-// Same cosine ranking as the Python CLI, so phone results match `openrights ask`.
 function search(question, topK) {
   const query = vector(question, state.idf);
   const queryNorm = norm(query);
@@ -77,9 +60,6 @@ function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
 }
 
-// The plain-language answers are written by this project, so a tiny, closed
-// subset of Markdown is safe: paragraph breaks and **bold**. Everything is
-// escaped first, so nothing in the archive can inject markup.
 function renderAnswer(body) {
   return body
     .split(/\n\s*\n/)
@@ -97,8 +77,6 @@ function highlight(text, question) {
   return escaped.replace(pattern, "<mark>$1</mark>");
 }
 
-// Statute text runs for hundreds of words. Show the window around the first
-// matching term instead of the arbitrary start of the chunk.
 function excerpt(text, question, size) {
   const terms = words(question).filter((term) => term.length > 3);
   const tokens = text.split(/\s+/);
@@ -124,8 +102,6 @@ function answerCard(hit, question) {
   const { chunk } = hit;
   const parsed = splitHeading(chunk.text);
   const heading = chunk.heading || parsed.heading;
-  // chunk.text is the search representation: the question repeated for weight,
-  // plus alias phrasings. chunk.body is what a person should actually read.
   const body = chunk.body || parsed.body;
   const card = document.createElement("article");
   card.className = "answer";
@@ -142,16 +118,95 @@ function passageCard(hit, index, question) {
   const card = document.createElement("article");
   card.className = "result";
   card.innerHTML = `
-    <div class="resulthead"><span>[${index}] ${escapeHtml(chunk.source)}</span><span class="score">${hit.score.toFixed(3)}</span></div>
+    <div class="resulthead"><span>[${index}] ${escapeHtml(chunk.source)}</span></div>
     <p>${highlight(excerpt(chunk.text, question, 70), question)}</p>
     <a href="${escapeHtml(chunk.url)}" target="_blank" rel="noreferrer">Open source \u2197</a>`;
   return card;
 }
 
+// --- AI Summary (Gemini + Groq fallback) ---
+const PROVIDERS = [
+  {
+    name: 'gemini',
+    url: 'https://gemini.fortravels.xyz/?key=' + (window.OPENRIGHTS_CONFIG?.geminiKey || '') + '&model=gemini-flash-latest',
+    buildBody: (prompt) => JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.2, maxOutputTokens: 4096 }
+    }),
+    parseResponse: (data) => {
+      const parts = data?.candidates?.[0]?.content?.parts;
+      if (!parts || !parts.length) return null;
+      const textPart = parts.find(p => p.text && !p.thought) || parts[parts.length - 1];
+      return textPart?.text?.trim() || null;
+    },
+    headers: { 'Content-Type': 'application/json' }
+  },
+  {
+    name: 'mistral',
+    url: 'https://api.mistral.ai/v1/chat/completions',
+    buildBody: (prompt) => JSON.stringify({
+      model: 'mistral-small-latest',
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 1024,
+      temperature: 0.2
+    }),
+    parseResponse: (data) => data?.choices?.[0]?.message?.content?.trim() || null,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + (window.OPENRIGHTS_CONFIG?.mistralKey || '')
+    }
+  }
+];
+let _geminiRequestId = 0;
+let _geminiAbort = null;
+
+async function geminiSummary(question, passages, requestId) {
+  const sources = passages.map((p, i) =>
+    `[${i+1}] ${p.chunk.source}\n${(p.chunk.body || p.chunk.text).slice(0, 600)}\nURL: ${p.chunk.url}`
+  ).join('\n\n');
+
+  const prompt = `You are a helpful legal information assistant. Synthesize the passages below into a clear, detailed answer to the question. Include specific rules, numbers, deadlines, thresholds, and exceptions when present. Do not use citation numbers like [1] or [2]. Write 100-200 words. Plain English. This is information, not legal advice.\n\nQuestion: ${question}\n\nPassages:\n${sources}\n\nAnswer:`;
+
+  if (_geminiAbort) _geminiAbort.abort();
+  _geminiAbort = new AbortController();
+
+  // Try each provider in order (Gemini first, Groq as fallback)
+  for (const provider of PROVIDERS) {
+    if (requestId !== _geminiRequestId) return null;
+    try {
+      const resp = await fetch(provider.url, {
+        signal: _geminiAbort.signal,
+        method: 'POST',
+        headers: provider.headers,
+        body: provider.buildBody(prompt)
+      });
+      // If rate-limited or server error, try next provider
+      if (resp.status === 429 || resp.status === 503) continue;
+      if (!resp.ok) continue;
+      const data = await resp.json();
+      const text = provider.parseResponse(data);
+      if (text) return text;
+      // Empty response, try next
+      continue;
+    } catch (e) {
+      if (e.name === 'AbortError') return null;
+      // Network error, try next provider
+      continue;
+    }
+  }
+  return null;
+}
+// --- End AI Summary ---
+
 function showResults(question) {
   const container = document.querySelector("#results");
   if (!state.ready) return;
   container.innerHTML = "";
+
+  // Increment request ID to invalidate any in-flight Gemini request
+  _geminiRequestId++;
+  const myRequestId = _geminiRequestId;
+
   if (!question) {
     container.innerHTML = '<div class="empty">Type a question to search the local archive.</div>';
     return;
@@ -163,17 +218,11 @@ function showResults(question) {
     return;
   }
 
-  // A weak plain-language match is worse than none: it reads as an
-  // authoritative answer to a question it does not cover. Below the floor,
-  // fall back to showing the law and saying so.
   const answer = hits.find(
     (hit) => hit.chunk.kind === "plain"
       && hit.score >= ANSWER_FLOOR
       && onSubject(question, hit.chunk.text, state.idf)
   );
-  // Evidence is the law itself. Another plain-language answer is not evidence,
-  // and an off-subject passage is noise dressed as a citation: a question about
-  // a mortgage was being "supported" by the child labor rules.
   const passages = hits
     .filter((hit) => hit.chunk.kind !== "plain" && onSubject(question, hit.chunk.text, state.idf, EVIDENCE_TERMS))
     .slice(0, 4);
@@ -190,16 +239,64 @@ function showResults(question) {
     return;
   }
 
-  if (!passages.length) return;
+  if (passages.length) {
+    const details = document.createElement("details");
+    details.className = "sources";
+    if (!answer) details.open = true;
+    const summary = document.createElement("summary");
+    summary.textContent = `${passages.length} supporting passage${passages.length === 1 ? "" : "s"} from the law`;
+    details.appendChild(summary);
+    passages.forEach((hit, index) => details.appendChild(passageCard(hit, index + 1, question)));
+    container.appendChild(details);
+  }
 
-  const details = document.createElement("details");
-  details.className = "sources";
-  if (!answer) details.open = true;
-  const summary = document.createElement("summary");
-  summary.textContent = `${passages.length} supporting passage${passages.length === 1 ? "" : "s"} from the law`;
-  details.appendChild(summary);
-  passages.forEach((hit, index) => details.appendChild(passageCard(hit, index + 1, question)));
-  container.appendChild(details);
+  // AI Summary (if toggle is on)
+  const aiToggle = document.getElementById('aiToggle');
+  if (!aiToggle || !aiToggle.checked) return;
+  const aiPassages = hits.filter(h => h.chunk.kind !== 'plain').slice(0, 5);
+  if (!aiPassages.length) return;
+
+  // Insert loading placeholder
+  const aiDetails = document.createElement('details');
+  aiDetails.className = 'ai-card';
+  aiDetails.open = true;
+  aiDetails.innerHTML = '<summary class="ai-label">AI Summary</summary><p class="ai-loading">Generating...</p>';
+  container.appendChild(aiDetails);
+
+  // Hard timeout: if no response in 15s, remove loader silently
+  const hardTimeout = setTimeout(() => {
+    if (myRequestId === _geminiRequestId && aiDetails.parentNode) {
+      aiDetails.remove();
+    }
+  }, 15000);
+
+  geminiSummary(question, aiPassages, myRequestId).then(text => {
+    clearTimeout(hardTimeout);
+    // Only render if this is still the active request
+    if (myRequestId !== _geminiRequestId) return;
+    if (!aiDetails.parentNode) return;
+
+    const loader = aiDetails.querySelector('.ai-loading');
+    if (text) {
+      if (loader) loader.remove();
+      const body = document.createElement('div');
+      body.className = 'ai-body';
+      body.innerHTML = renderAnswer(text);
+      aiDetails.appendChild(body);
+      const meta = document.createElement('p');
+      meta.className = 'ai-meta';
+      meta.textContent = 'AI-generated answer. May be inaccurate, always verify with the cited sources.';
+      aiDetails.appendChild(meta);
+    } else {
+      // Show brief error instead of silent removal
+      if (loader) loader.textContent = 'AI temporarily unavailable. Try again later.';
+    }
+  }).catch(() => {
+    clearTimeout(hardTimeout);
+    if (!aiDetails.parentNode) return;
+    const loader = aiDetails.querySelector('.ai-loading');
+    if (loader) loader.textContent = 'AI temporarily unavailable. Try again later.';
+  });
 }
 
 function init() {
@@ -223,8 +320,6 @@ function init() {
 
 const questionField = document.querySelector("#question");
 
-// A textarea does not size itself. Grow it to fit what is typed, up to four
-// lines, so a long question stays readable instead of scrolling out of view.
 const MAX_LINES = 4;
 function fitToContent() {
   questionField.style.height = "auto";
@@ -234,25 +329,23 @@ function fitToContent() {
   questionField.style.height = `${Math.min(questionField.scrollHeight, ceiling)}px`;
   questionField.style.overflowY = questionField.scrollHeight > ceiling ? "auto" : "hidden";
 }
-
 questionField.addEventListener("input", fitToContent);
 
 // Clear button
 const clearBtn = document.querySelector("#clearBtn");
 function updateClearBtn() {
-  clearBtn.style.display = questionField.value.trim() ? "flex" : "none";
+  if (clearBtn) clearBtn.style.display = questionField.value.trim() ? "flex" : "none";
 }
-clearBtn.addEventListener("click", () => {
-  questionField.value = "";
-  fitToContent();
-  updateClearBtn();
-  questionField.focus();
-});
+if (clearBtn) {
+  clearBtn.addEventListener("click", () => {
+    questionField.value = "";
+    fitToContent();
+    updateClearBtn();
+    questionField.focus();
+  });
+}
 questionField.addEventListener("input", updateClearBtn);
 
-
-// Enter searches, as it would in a single-line field. A question is never
-// multi-paragraph, but leave Shift+Enter for anyone who wants a break.
 questionField.addEventListener("keydown", (event) => {
   if (event.key === "Enter" && !event.shiftKey) {
     event.preventDefault();
@@ -268,14 +361,10 @@ document.querySelector("#searchForm").addEventListener("submit", (event) => {
 document.querySelectorAll("[data-question]").forEach((button) => button.addEventListener("click", () => {
   questionField.value = button.dataset.question;
   fitToContent();
+  updateClearBtn();
   showResults(button.dataset.question);
 }));
 
-// Offline caching needs a service worker, and browsers only allow one in a
-// secure context: https, or localhost. Plain http on a bare IP is refused, so
-// registering there silently does nothing and the app looks broken in airplane
-// mode. Say so instead of pretending. The APK runs from file:// and needs no
-// worker, because its assets are already on the device.
 function reportOfflineReadiness() {
   const status = document.querySelector("#statusText");
   if (!status || !state.ready) return;
@@ -288,14 +377,6 @@ function reportOfflineReadiness() {
     return;
   }
   const saved = () => { status.textContent = "Ready \u00b7 saved for offline"; };
-
-  // Cache-first means a returning visitor renders the previous release: the
-  // new worker installs while the old one is still answering. Reload once when
-  // control changes, so the new archive is what they read.
-  //
-  // Only when a worker was already in charge. On a first visit control passes
-  // from nothing to the new worker, and the page is current already; reloading
-  // there would be a visible flash for no reason.
   const hadController = Boolean(navigator.serviceWorker.controller);
   let reloading = false;
   navigator.serviceWorker.addEventListener("controllerchange", () => {
@@ -303,7 +384,6 @@ function reportOfflineReadiness() {
     reloading = true;
     location.reload();
   });
-
   navigator.serviceWorker
     .register("./service-worker.js")
     .then((registration) => {

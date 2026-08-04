@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#173b36">
   <meta name="description" content="Offline source-based legal information assistant. Search official U.S. law on your phone with no internet.">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./styles.css?v=20">
   <title>OpenRights Assistant</title>
 </head>
 <body>
@@ -26,10 +26,12 @@
       <form id="searchForm" class="searchbox">
         <label for="question">What do you want to understand?</label>
         <div class="inputrow">
-          <textarea id="question" rows="1" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="sentences" placeholder="Can my employer require overtime?" required></textarea><button type="button" id="clearBtn" class="clearbtn" aria-label="Clear">&#10005;</button>
+          <div class="input-wrap"><textarea id="question" rows="1" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="sentences" placeholder="Can my employer require overtime?" required></textarea><button type="button" id="clearBtn" class="clearbtn" aria-label="Clear">&#10005;</button></div>
           <button type="submit">Search <span>↗</span></button>
         </div>
       </form>
+      <div class="ai-toggle"><label><input type="checkbox" id="aiToggle" checked> AI Summary</label></div>
+
       <div class="chips" aria-label="Example questions">
         <button data-question="What is the federal minimum wage?">Minimum wage</button>
         <button data-question="How do I recognize a phishing scam?">Phishing</button>
@@ -50,6 +52,7 @@
     </footer>
   </main>
   <script src="./data/index.js"></script>
-  <script src="./app.js"></script>
+  <script src="./config.js"></script>
+  <script src="./app.js?v=27"></script>
 </body>
 </html>

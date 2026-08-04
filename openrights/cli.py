@@ -6,6 +6,7 @@ from pathlib import Path
 
 from .ingest import ingest
 from .generator import build_prompt, generate
+from .cloud_generator import generate_cloud, PROVIDERS
 from .benchmark import run as run_benchmark, save as save_benchmark
 from .freshness import check as check_freshness, report as report_freshness
 from .rag import TfidfIndex, is_on_subject, EVIDENCE_TERMS
@@ -48,13 +49,16 @@ def shown_results(index: TfidfIndex, question: str) -> list[dict]:
     return ([answer] if answer else []) + evidence
 
 
-def ask(question: str, top_k: int, model: str | None) -> None:
+def ask(question: str, top_k: int, model: str | None, provider: str | None = None) -> None:
     index = TfidfIndex.load(ROOT / "data/processed/index.json")
     # The same filtering the interface applies. Printing the raw top of the
     # index here would make the CLI answer questions the app declines: "can my
     # landlord raise the rent" matches a payroll-deduction answer at 0.53 on
     # sentence shape alone.
     results = shown_results(index, question)[:top_k]
+    if provider:
+        print(generate_cloud(provider, question, results))
+        return
     if model:
         print(generate(Path(model), build_prompt(question, results)))
         return
@@ -178,6 +182,7 @@ def main() -> None:
     ask_parser.add_argument("question")
     ask_parser.add_argument("--top-k", type=int, default=5)
     ask_parser.add_argument("--model", help="Path to a GGUF model used by llama-cli")
+    ask_parser.add_argument("--provider", choices=list(PROVIDERS), help="Cloud LLM provider (gemini, qwen)")
     args = parser.parse_args()
     if args.command == "ingest":
         print(f"Indexed {ingest(ROOT)} chunks.")
@@ -200,7 +205,7 @@ def main() -> None:
         save_benchmark(ROOT, result)
         print(json.dumps(result, indent=2))
     elif args.command == "ask":
-        ask(args.question, args.top_k, args.model)
+        ask(args.question, args.top_k, args.model, getattr(args, "provider", None))
 
 
 if __name__ == "__main__":

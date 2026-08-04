@@ -34,3 +34,4 @@ dist/
 # OS
 .DS_Store
 Thumbs.db
+app/config.js
