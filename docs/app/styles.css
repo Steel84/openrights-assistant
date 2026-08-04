@@ -1,0 +1,137 @@
+:root {
+  --ink:#173b36; --muted:#65736d; --paper:#f4f0e8; --card:#fffdf8;
+  --line:#d8d5ca; --accent:#d65f3b; --success:#3d8b5f;
+  --prose:#29453f;          /* body copy, a touch softer than headings */
+  --btn-hover:#1f4f47;      /* the button one step lighter than --ink */
+  --btn-arrow:#f5ad85;
+  --shadow:#e4dfd3;         /* the flat offset shadow under the search box */
+  --halo:#dbe8d9;           /* ring around the status dot */
+  --halo-fade:#dbe8d900;
+  --tint:#fff8f5;           /* faint accent wash on hover */
+  --mark:#ffe0b8;           /* search-term highlight */
+}
+
+/* Not an inversion of the light theme. Backgrounds keep the same green hue but
+   sit dark, surfaces get lighter with elevation rather than using shadow, and
+   the accent is lifted and desaturated so it reads on a dark ground. The button
+   needs no special case: it is --ink on --paper, so it flips with them. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink:#e7eeea; --muted:#94a69f; --paper:#101d1a; --card:#182b26;
+    --line:#2b3f39; --accent:#ef8a66; --success:#5fb583;
+    --prose:#c4d5ce;
+    --btn-hover:#cddbd4;
+    --btn-arrow:#8a4a30;
+    --shadow:#0a1512;
+    --halo:#1d3830;
+    --halo-fade:#1d383000;
+    --tint:#22332c;
+    --mark:#6b4a22;
+  }
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; background:var(--paper); color:var(--ink); font-family: Georgia, "Times New Roman", serif; -webkit-font-smoothing:antialiased; }
+.shell { width:min(100% - 36px, 1040px); margin:auto; min-height:100vh; display:flex; flex-direction:column; }
+.topbar { padding:28px 0 24px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--line); }
+.eyebrow,.kicker { margin:0 0 12px; font:700 11px/1.2 Arial,sans-serif; letter-spacing:.16em; color:var(--accent); }
+h1 { margin:0; font-size:clamp(28px,5vw,48px); line-height:.95; letter-spacing:-.04em; }
+h1 em { color:var(--accent); font-weight:400; }
+.status { display:flex; align-items:center; gap:8px; font:12px Arial,sans-serif; color:var(--muted); padding-top:4px; }
+.status i { width:9px; height:9px; background:var(--success); border-radius:50%; display:block; box-shadow:0 0 0 4px var(--halo); animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 4px var(--halo)} 50%{box-shadow:0 0 0 7px var(--halo-fade)} }
+.hero { padding:clamp(48px,9vw,100px) 0 44px; max-width:760px; }
+h2 { margin:0; font-size:clamp(38px,7vw,76px); line-height:.93; letter-spacing:-.055em; }
+.lede { max-width:580px; margin:24px 0 34px; color:var(--muted); font:16px/1.55 Arial,sans-serif; }
+.searchbox { background:var(--card); border:1px solid var(--line); padding:18px; box-shadow:8px 8px 0 var(--shadow); border-radius:4px; }
+.searchbox label { display:block; margin-bottom:10px; font:700 12px Arial,sans-serif; color:var(--muted); }
+.inputrow { display:flex; gap:10px; position:relative; align-items:center; }
+textarea { display:block; width:100%; min-width:0; flex:1; border:0; border-bottom:2px solid var(--ink); outline:0; padding:10px 30px 10px 4px; background:transparent; color:var(--ink); font:clamp(16px,4.2vw,20px)/1.4 Georgia,serif; resize:none; overflow:hidden; transition:border-color .2s; -webkit-appearance:none; appearance:none; border-radius:0; touch-action:manipulation; user-select:text; -webkit-user-select:text; pointer-events:auto; }
+textarea:focus { border-color:var(--accent); }
+textarea::placeholder { font-size:15px; color:var(--muted); opacity:1; overflow:hidden; text-overflow:ellipsis; }
+button { cursor:pointer; border:0; transition:transform .1s, background .2s; }
+button:active { transform:scale(0.97); }
+.inputrow button[type="submit"] { background:var(--ink); color:var(--paper); padding:0 20px; height:38px; font:700 14px Arial,sans-serif; border-radius:3px; white-space:nowrap; display:inline-flex; align-items:center; justify-content:center; }
+.inputrow button[type="submit"]:hover { background:var(--btn-hover); }
+.inputrow button[type="submit"] span { color:var(--btn-arrow); margin-left:8px; font-size:16px; line-height:1; }
+.chips { display:flex; gap:8px; flex-wrap:wrap; margin-top:18px; }
+.chips button { border:1px solid var(--line); color:var(--ink); background:transparent; border-radius:20px; padding:9px 13px; font:12px Arial,sans-serif; }
+.chips button:hover { border-color:var(--accent); color:var(--accent); background:var(--tint); }
+.results { display:grid; gap:14px; padding-bottom:40px; }
+.empty { color:var(--muted); font:14px/1.6 Arial,sans-serif; padding:26px 0; }
+.result { background:var(--card); border:1px solid var(--line); padding:20px; border-radius:4px; transition:box-shadow .2s; }
+.result:hover { box-shadow:0 4px 12px rgba(23,59,54,.08); }
+.resulthead { display:flex; justify-content:space-between; gap:15px; margin-bottom:12px; font:700 12px Arial,sans-serif; }
+.result p { margin:0; font:17px/1.5 Georgia,serif; color:var(--prose); }
+.result a { display:inline-block; margin-top:14px; color:var(--accent); font:12px Arial,sans-serif; text-decoration:none; overflow-wrap:anywhere; }
+.result a:hover { text-decoration:underline; }
+footer { margin-top:auto; padding:20px 0 26px; display:flex; justify-content:space-between; gap:15px; color:var(--muted); font:11px Arial,sans-serif; border-top:1px solid var(--line); flex-wrap:wrap; }
+footer a { color:var(--accent); text-decoration:none; }
+footer a:hover { text-decoration:underline; }
+@media (max-width:600px) {
+  .shell { width:min(100% - 20px, 1040px); }
+  .topbar { padding-top:20px; flex-direction:column; align-items:center; gap:14px; }
+  .status { padding-top:0; }
+  .inputrow { display:block; }
+  .inputrow button[type="submit"] { width:100%; margin-top:15px; padding:14px; }
+  /* The offset shadow is decoration; the question field is the product. Trade
+     the shadow and most of the card padding for input width. */
+  .searchbox { padding:14px 12px; box-shadow:3px 3px 0 var(--shadow); }
+  .searchbox label { margin-bottom:8px; }
+  textarea { padding:10px 30px 10px 2px; font-size:17px; }
+  textarea::placeholder { font-size:14px; }
+  footer { display:block; }
+  footer span { display:block; margin-top:5px; }
+  .chips { gap:6px; }
+  .chips button { padding:7px 10px; font-size:11px; }
+}
+
+mark { background:var(--mark); color:var(--ink); padding:1px 3px; border-radius:2px; }
+
+/* The answer: one plain-language explanation, set to be read, not scanned. */
+.answer { background:var(--card); border:1px solid var(--line); border-radius:4px; padding:26px 24px 22px; }
+.answerlabel { margin:0 0 10px; font:700 11px Arial,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+.answer h3 { margin:0 0 16px; font:400 26px/1.25 Georgia,serif; letter-spacing:-.01em; color:var(--ink); }
+.answer p { margin:0 0 14px; font:17px/1.62 Georgia,serif; color:var(--prose); max-width:62ch; }
+.answer p:last-of-type { margin-bottom:0; }
+.answer strong { font-weight:700; color:var(--ink); }
+.answermeta { margin:20px 0 0 !important; padding-top:14px; border-top:1px solid var(--line); font:12px/1.5 Arial,sans-serif !important; color:var(--muted) !important; }
+.answermeta a { color:var(--accent); text-decoration:none; }
+.answermeta a:hover { text-decoration:underline; }
+
+/* The statute itself is evidence, not the answer. Available, not in the way. */
+.sources { border-top:1px solid var(--line); padding-top:8px; }
+.sources summary { cursor:pointer; padding:10px 0; font:12px Arial,sans-serif; color:var(--muted); list-style:none; }
+.sources summary::-webkit-details-marker { display:none; }
+.sources summary::before { content:"\25B8"; display:inline-block; margin-right:8px; transition:transform .15s ease; }
+.sources[open] summary::before { transform:rotate(90deg); }
+.sources summary:hover { color:var(--accent); }
+.sources .result { margin-bottom:12px; }
+.sources .result:last-child { margin-bottom:0; }
+.result p { font-size:15px; line-height:1.55; }
+
+@media (max-width:600px) {
+  .answer { padding:22px 18px 18px; }
+  .answer h3 { font-size:22px; }
+  .answer p { font-size:16px; }
+}
+
+.input-wrap { position:relative; flex:1; min-width:0; display:flex; align-items:center; }
+.clearbtn { position:absolute; right:8px; top:50%; transform:translateY(-50%); width:22px; height:22px; background:none; border:none; color:var(--muted); font-size:14px; display:none; align-items:center; justify-content:center; padding:0; line-height:1; cursor:pointer; z-index:1; }
+.clearbtn:hover { color:var(--ink); }
+
+/* AI toggle & card */
+.ai-toggle { margin:8px 0 0; font-size:13px; color:#777; }
+.ai-toggle label { cursor:pointer; display:flex; align-items:center; gap:6px; }
+.ai-toggle input { accent-color:#4ecdc4; }
+.ai-card { background:var(--card); border:1px solid var(--line); border-radius:4px; padding:26px 24px 22px; }
+.ai-card summary.ai-label { cursor:pointer; list-style:none; user-select:none; }
+.ai-card summary.ai-label::-webkit-details-marker { display:none; }
+.ai-card summary.ai-label::before { content:"\25BC"; display:inline-block; margin-right:8px; font-size:9px; transition:transform .15s; vertical-align:middle; }
+.ai-card:not([open]) summary.ai-label::before { transform:rotate(-90deg); }
+.ai-label { font:700 11px/1 Arial,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin:0 0 10px; }
+.ai-loading { color:var(--muted); font:italic 15px/1.6 Georgia,serif; margin:0; }
+.ai-body { font:17px/1.62 Georgia,serif; color:var(--prose); margin:0; }
+.ai-body p { margin:0 0 14px; }
+.ai-body p:last-child { margin-bottom:0; }
+.ai-card p.ai-meta { font:11px/1.4 Arial,sans-serif !important; color:var(--muted) !important; opacity:0.6; margin:10px 0 0 !important; letter-spacing:0.02em; }

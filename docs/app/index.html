@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#173b36">
+  <meta name="description" content="Offline source-based legal information assistant. Search official U.S. law on your phone with no internet.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css?v=20">
+  <title>OpenRights Assistant</title>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">OPENRIGHTS ASSISTANT / OFFLINE MODE</p>
+        <h1>Know your rights.<br><em>Keep the source.</em></h1>
+      </div>
+      <span class="status"><i></i><span id="statusText">Loading local archive</span></span>
+    </header>
+
+    <section class="hero">
+      <p class="kicker">Private. Offline. Cited.</p>
+      <h2>Ask a question.<br>Get the law that matters.</h2>
+      <p class="lede">Searches 10 official U.S. government sources on this device. No account. No server. No tracking. Works in airplane mode.</p>
+      <form id="searchForm" class="searchbox">
+        <label for="question">What do you want to understand?</label>
+        <div class="inputrow">
+          <div class="input-wrap"><textarea id="question" rows="1" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="sentences" placeholder="Can my employer require overtime?" required></textarea><button type="button" id="clearBtn" class="clearbtn" aria-label="Clear">&#10005;</button></div>
+          <button type="submit">Search <span>↗</span></button>
+        </div>
+      </form>
+      <div class="ai-toggle"><label><input type="checkbox" id="aiToggle" checked> AI Summary</label></div>
+
+      <div class="chips" aria-label="Example questions">
+        <button data-question="What is the federal minimum wage?">Minimum wage</button>
+        <button data-question="How do I recognize a phishing scam?">Phishing</button>
+        <button data-question="Can a debt collector call me at work?">Debt collection</button>
+        <button data-question="Can I take unpaid leave for a family emergency?">Family leave</button>
+        <button data-question="Do I have the right to a safe workplace?">Workplace safety</button>
+        <button data-question="What types of employment discrimination are illegal?">Discrimination</button>
+        <button data-question="What makes an advertisement deceptive?">Advertising</button>
+        <button data-question="What should I know before getting a mortgage?">Mortgages</button>
+      </div>
+    </section>
+
+    <section id="results" class="results" aria-live="polite"></section>
+
+    <footer>
+      <span>Offline archive · <b id="chunkCount">—</b> passages from 10 official sources</span>
+      <span>Not legal advice · verify your jurisdiction · <a href="https://github.com/Steel84/openrights-assistant" target="_blank">Source code</a></span>
+    </footer>
+  </main>
+  <script src="./data/index.js"></script>
+  <script src="./config.js"></script>
+  <script src="./app.js?v=27"></script>
+</body>
+</html>

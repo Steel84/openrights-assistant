@@ -1,0 +1,19 @@
+{
+  "name": "OpenRights Assistant",
+  "short_name": "OpenRights",
+  "description": "Offline legal information assistant. Search official law on your phone with no internet.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f0e8",
+  "theme_color": "#173b36",
+  "orientation": "portrait-primary",
+  "categories": ["education", "utilities"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23173b36' width='100' height='100' rx='20'/><text x='50' y='68' font-size='50' text-anchor='middle' fill='%23f4f0e8' font-family='serif'>⚖</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
