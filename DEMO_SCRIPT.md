@@ -62,10 +62,10 @@ in a 60 second demo. `docs/COVERAGE.md` has the full gap list.
 
 ## Worth saying out loud
 
-- Under 2 MB. Runs on a phone nobody would call new.
+- About 2.2 MB. Runs on a phone nobody would call new.
 - No account, no permissions, no network calls after install.
 - Every answer names the statute and links to it.
-- 10 official sources, 59 plain-language answers, checked on every commit.
+- 10 official sources, 1,399 indexed passages, 59 plain-language answers, 89 checks (32+50+7), checked on every commit.
 
 ## Tips
 

@@ -35,3 +35,4 @@ dist/
 .DS_Store
 Thumbs.db
 app/config.js
+docs/app/config.js

@@ -6,13 +6,13 @@
 [![Offline](https://img.shields.io/badge/works-offline-brightgreen.svg)](#)
 [![Dependencies](https://img.shields.io/badge/dependencies-zero-orange.svg)](#)
 
-An offline-first legal information assistant that searches official public law on your phone. No internet needed. No account. No server.
+An offline-first legal information assistant that searches official public law on your phone. No internet needed. No account. No server. Retrieval and search are fully offline. An optional AI Summary feature (off by default) uses Gemini/Mistral cloud APIs for plain-language synthesis when enabled.
 
 ---
 
 ## What it does
 
-You ask a plain-language question about your rights. The app searches 1,390+ passages from 10 official U.S. government sources and shows you the exact legal text that answers your question, with a link to verify it yourself.
+You ask a plain-language question about your rights. The app searches its local archive of official U.S. government sources and shows you the exact legal text that answers your question, with a link to verify it yourself.
 
 **Example:**
 ```
@@ -32,8 +32,6 @@ Source: https://www.govinfo.gov/content/pkg/USCODE-2023-title29/...
 - **59 plain-language answers** across wages, dismissal, leave, safety, debt, credit, discrimination, organising, and housing
 - **32 retrieval checks, 50 answer checks, and 7 must-decline checks**, run on every commit
 - **Mobile-ready**: PWA with service worker + Android WebView APK
-- **< 4ms** average query latency
-- **< 500 KB** phone archive size
 - **Optional local LLM** via llama.cpp for plain-language summaries
 - **Apache 2.0** licensed
 
@@ -74,6 +72,8 @@ For a native Android APK: see [RUNNING.md](RUNNING.md).
 | FTC Advertising Basics | Consumer protection |
 | FTC Debt Collection FAQs | Consumer protection |
 | CFPB Mortgages | Consumer finance |
+| National Labor Relations Act | Organising and collective bargaining |
+| Fair Housing Act | Housing discrimination and accommodation |
 
 ## Commands
 
@@ -99,13 +99,13 @@ phone. The archive grew when the plain-language answers were added.
 | --- | --- |
 | Sources | 10 official government sources |
 | Plain-language answers | 59 |
-| Indexed statute passages | 1,144 |
+| Indexed statute passages | 1,399 |
 | Retrieval accuracy | 32/32 |
 | Answer coverage | 50/50 |
-| Query latency | ~17 ms |
-| Index RAM | ~13 MB |
-| Phone archive | 1.8 MB |
-| Install size (no model) | ~2 MB |
+| Query latency | ~22 ms |
+| Index RAM | ~15.2 MB |
+| Phone archive | ~2.2 MB |
+| Install size (no model) | ~2.2 MB |
 | External dependencies | 0 |
 
 ## Documentation
@@ -123,7 +123,7 @@ phone. The archive grew when the plain-language answers were added.
 
 ## Roadmap
 
-1. **DONE**: Offline retrieval, mobile interface, 8 sources, 32 evals, CI, documentation
+1. **DONE**: Offline retrieval, mobile interface, 10 sources, 89 checks (32+50+7), CI, documentation
 2. **Next**: Local LLM benchmark on budget Android phone, demo video
 3. **Planned**: India pilot (labor + consumer law in English/Hindi)
 4. **Future**: Brazil, Nigeria, Philippines; multilingual tokenizer; community contribution pipeline

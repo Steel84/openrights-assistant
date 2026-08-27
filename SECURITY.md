@@ -15,7 +15,7 @@ We will acknowledge the report within 72 hours and aim to release a fix within 7
 The primary threats we consider:
 
 1. **Malicious source injection**: A compromised upstream source could inject misleading legal text. Mitigation: sources are pinned to specific official government URLs; ingestion includes HTML sanitization.
-2. **Prompt injection via generation**: If the optional LLM is enabled, adversarial text in source passages could manipulate the model output. Mitigation: generation is optional, output is always shown alongside raw source passages for verification.
+2. **Prompt injection and cloud disclosure via generation**: If the optional PWA AI Summary is enabled, adversarial text in source passages could manipulate the model output, and the user's question plus up to five matched legal passages are sent to external Gemini/Mistral servers. The PWA feature is disabled by default. The CLI `--model` path uses llama.cpp locally and does not send the question or passages to an external provider. In both modes, output is shown alongside raw source passages for verification.
 3. **Supply chain**: The project has zero runtime dependencies beyond the Python standard library. The optional LLM layer depends only on an external `llama-cli` binary.
 
 ## Supported versions

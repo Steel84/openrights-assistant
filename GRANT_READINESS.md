@@ -8,7 +8,7 @@ Honest status of each grant requirement as of the latest commit.
 | --- | --- | --- |
 | Works offline | **DONE** | PWA + service worker + Android WebView. No network permission in manifest. Tested in airplane mode. |
 | Open source | **DONE** | Apache 2.0 license. Full code, pipeline, evals, prompts, and documentation on GitHub. |
-| Runs on budget phone | **DONE (retrieval)** | 500 KB archive, < 4ms latency, < 1 MB RAM. Needs on-device benchmark for LLM layer. |
+| Runs on budget phone | **DONE (retrieval)** | ~2.2 MB archive, ~22 ms latency, ~15.2 MB index resident memory. Needs on-device benchmark for LLM layer. |
 | LLM integration | **READY** | llama.cpp adapter, prompt template, Qwen2.5-1.5B Q2 GGUF selected. Awaiting device test. |
 | Useful application | **DONE** | 10 official sources across labor, consumer, safety, discrimination, organising, housing, and finance law. 59 plain-language answers; 32 retrieval, 50 answer, and 7 must-decline checks all pass. A weekly job re-checks every source against the text it was written from. |
 | Privacy | **DONE** | Zero permissions, zero network after install, zero telemetry, no account required. |
@@ -36,7 +36,7 @@ Honest status of each grant requirement as of the latest commit.
 
 ## Remaining before submission
 
-1. Run `python -m openrights ingest` to confirm all 8 sources download and index correctly.
+1. Run `python -m openrights ingest` to confirm all 10 sources download and index correctly.
 2. Record 60-second demo video following DEMO_SCRIPT.md.
 3. (Optional) Run LLM on a budget Android phone and add timing to benchmarks.
 4. Make repository public if still private.
