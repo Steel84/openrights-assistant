@@ -124,7 +124,7 @@ function passageCard(hit, index, question) {
   return card;
 }
 
-// --- AI Summary (Gemini + Groq fallback) ---
+// --- AI Summary (Gemini + Mistral fallback) ---
 const PROVIDERS = [
   {
     name: 'gemini',
@@ -170,7 +170,7 @@ async function geminiSummary(question, passages, requestId) {
   if (_geminiAbort) _geminiAbort.abort();
   _geminiAbort = new AbortController();
 
-  // Try each provider in order (Gemini first, Groq as fallback)
+  // Try each provider in order (Gemini first, Mistral as fallback)
   for (const provider of PROVIDERS) {
     if (requestId !== _geminiRequestId) return null;
     try {

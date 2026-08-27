@@ -19,10 +19,10 @@ OpenRights Assistant is designed as a modular offline-first information retrieva
                            │
 ┌──────────────────────────▼──────────────────────────────┐
 │               Generation Layer (optional)                 │
-│  llama.cpp with a quantized 1.5-4B parameter model       │
+│  CLI: local llama.cpp with a quantized 1.5-4B model       │
+│  PWA: optional Gemini/Mistral cloud synthesis             │
 │  Input: question + retrieved passages                     │
-│  Output: plain-language answer with [1][2] citations      │
-│  Constraint: 256 token cap, temperature 0.2              │
+│  Output: plain-language answer with citations             │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -31,7 +31,7 @@ OpenRights Assistant is designed as a modular offline-first information retrieva
 1. **Ingest**: Official HTML sources are downloaded, cleaned (tags/nav/scripts removed), split into ~450-word overlapping chunks, and indexed with TF-IDF.
 2. **Index**: The index stores term frequencies, inverse document frequencies, and metadata (source title, URL, chunk ID) in a single JSON file.
 3. **Search**: A user question is tokenized and vectorized with the same IDF weights. Cosine similarity ranks passages. Top-k results are returned with provenance.
-4. **Generate** (optional): Retrieved passages are formatted into a strict prompt. A local GGUF model produces a short cited answer.
+4. **Generate** (optional): Retrieved passages are formatted into a strict prompt. The CLI can send that prompt to a local GGUF model through llama.cpp. The PWA has a separate opt-in cloud path that sends the question and matched passages to Gemini/Mistral for synthesis.
 5. **Export**: For the phone, vectors are stripped (recomputed in the browser) and the index is exported as a JS assignment for WebView compatibility.
 
 ## Design decisions
@@ -42,10 +42,10 @@ OpenRights Assistant is designed as a modular offline-first information retrieva
 | No external vector DB | Offline requirement; single JSON file is portable |
 | 450-word chunks with 60-word overlap | Balances context length vs. retrieval precision |
 | JS assignment instead of fetch | WebView file:// origin blocks fetch(); script tags work |
-| Optional LLM | Retrieval alone is useful; generation adds value but requires more resources |
+| Optional generation | Retrieval alone is useful and fully offline; CLI llama.cpp is local, while the PWA Gemini/Mistral path is cloud-backed and off by default |
 | Apache 2.0 | Compatible with all major open-source AI ecosystems |
 
-## Resource budget (target)
+## Resource budget (target, see README for measured results)
 
 | Resource | Budget |
 | --- | --- |

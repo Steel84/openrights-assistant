@@ -3,7 +3,7 @@
 ---
 ## Executive Summary
 OpenRights Assistant is an offline-first, open-source application that helps people understand their legal rights by searching official public law on their phone, with no internet connection, no account, and no server cost. It retrieves exact passages from government sources and shows where each answer comes from, so users can verify the information themselves.
-The prototype is live, tested, and open: 10 official U.S. legal sources, 1,144 indexed passages, 59 plain-language answers, 89 automated checks (32 retrieval + 50 answer coverage + 7 must-decline safety checks), a working mobile interface, and a clear path to multi-jurisdiction expansion.
+The prototype is live, tested, and open: 10 official U.S. legal sources, 1,399 indexed passages, 59 plain-language answers, 89 automated checks (32 retrieval + 50 answer coverage + 7 must-decline safety checks), a working mobile interface, and a clear path to multi-jurisdiction expansion.
 ---
 ## The Problem
 Billions of people face legal situations every day: unpaid wages, workplace discrimination, debt collectors, unsafe conditions, deceptive advertising. The information they need is technically public, but:
@@ -15,7 +15,7 @@ These barriers are highest in communities where connectivity is intermittent and
 ---
 ## Our Solution
 ### How it works
-1. **Install once** (phone archive is 1.8 MB; optional local LLM adds model weight).
+1. **Install once** (phone archive is about 2.2 MB; optional local LLM adds model weight).
 2. **Turn off the internet.** The app works in airplane mode.
 3. **Ask a question** in plain language: "Can my employer require overtime?" or "How do I stop a debt collector from calling?"
 4. **Get cited passages** from official law, ranked by relevance, with source URLs for verification.
@@ -36,7 +36,7 @@ These barriers are highest in communities where connectivity is intermittent and
 User question
  ||
  vv
-[TF-IDF Retrieval] - searches 1,144 passages from 10 official sources
+[TF-IDF Retrieval] - searches 1,399 passages from 10 official sources
  ||
  vv
 [Ranked results with citations and source URLs]
@@ -48,7 +48,7 @@ User question
 ```
 **Key technical decisions:**
 - Zero external dependencies (Python standard library only)
-- TF-IDF over embeddings: deterministic, debuggable, runs in ~17ms average on standard hardware
+- TF-IDF over embeddings: deterministic, debuggable, runs in ~22ms average on standard hardware
 - Single JSON index file: no database, no vector store, fully portable
 - PWA + Android WebView: one codebase for all mobile platforms
 - Optional LLM: the app is useful without it; generation adds value for users who want summaries
@@ -57,14 +57,14 @@ User question
 | Metric | Value |
 | --- | --- |
 | Official sources indexed | 10 |
-| Indexed statute passages | 1,144 |
+| Indexed statute passages | 1,399 |
 | Plain-language answers | 59 |
 | Retrieval accuracy | 100% (32/32) |
 | Answer coverage | 100% (50/50) |
-| Query latency | ~17 ms average |
-| Index memory footprint | ~13 MB |
-| Phone archive size | 1.8 MB |
-| Install size (no model) | ~2 MB |
+| Query latency | ~22 ms average |
+| Index memory footprint | ~15.2 MB |
+| Phone archive size | ~2.2 MB |
+| Install size (no model) | ~2.2 MB |
 | CI pipeline | GitHub Actions |
 | License | Apache 2.0 |
 | External runtime dependencies | Zero |
@@ -115,7 +115,7 @@ OpenRights Assistant already implements the architecture QVAC is built around: *
 | Local-first / offline-first | 100% offline after install |
 | No cloud dependency | Zero network calls, zero external APIs |
 | Open source | Full repo, Apache 2.0, open evals |
-| Low-resource hardware | ~17ms latency, 1.8 MB archive |
+| Low-resource hardware | ~22ms latency, ~2.2 MB archive |
 | On-device LLM | Currently llama.cpp; migrating to QVAC |
 | Real-world utility | Labor rights, consumer protection, discrimination law |
 | Global scope | Multi-jurisdiction architecture; India pilot planned |
