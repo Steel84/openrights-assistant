@@ -123,6 +123,11 @@ PLAIN_SOURCES = {
         "Civil Rights Act Title VII",
         "https://www.govinfo.gov/content/pkg/USCODE-2023-title42/html/USCODE-2023-title42-chap21-subchapVI.htm",
     ),
+    "rights": (
+        "Legal complaints",
+        "Federal complaint and enforcement agencies",
+        "https://www.usa.gov/legal-aid",
+    ),
 }
 
 
