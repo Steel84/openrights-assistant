@@ -81,22 +81,22 @@ PLAIN_SOURCES = {
     "flsa": (
         "Wages and overtime",
         "Fair Labor Standards Act",
-        "https://www.govinfo.gov/content/pkg/USCODE-2023-title29/html/USCODE-2023-title29-chap8.htm",
+        "https://uscode.house.gov/view.xhtml?path=/prelim@title29/chapter8&edition=prelim",
     ),
     "fmla": (
         "Family and medical leave",
         "Family and Medical Leave Act",
-        "https://www.govinfo.gov/content/pkg/USCODE-2023-title29/html/USCODE-2023-title29-chap28.htm",
+        "https://uscode.house.gov/view.xhtml?path=/prelim@title29/chapter28&edition=prelim",
     ),
     "osha": (
         "Workplace safety",
         "Occupational Safety and Health Act",
-        "https://www.govinfo.gov/content/pkg/USCODE-2023-title29/html/USCODE-2023-title29-chap15.htm",
+        "https://uscode.house.gov/view.xhtml?path=/prelim@title29/chapter15&edition=prelim",
     ),
     "debt": (
         "Debt collection",
         "Fair Debt Collection Practices Act",
-        "https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap41-subchapV.htm",
+        "https://uscode.house.gov/view.xhtml?path=/prelim@title15/chapter41/subchapterV&edition=prelim",
     ),
     "credit": (
         "Credit reports",
@@ -106,22 +106,22 @@ PLAIN_SOURCES = {
     "termination": (
         "Losing a job",
         "Civil Rights Act Title VII and the WARN Act",
-        "https://www.govinfo.gov/content/pkg/USCODE-2023-title42/html/USCODE-2023-title42-chap21-subchapVI.htm",
+        "https://uscode.house.gov/view.xhtml?path=/prelim@title42/chapter21/subchapterVI&edition=prelim",
     ),
     "organising": (
         "Talking about pay and organising",
         "National Labor Relations Act",
-        "https://www.govinfo.gov/content/pkg/USCODE-2023-title29/html/USCODE-2023-title29-chap7.htm",
+        "https://uscode.house.gov/view.xhtml?path=/prelim@title29/chapter7&edition=prelim",
     ),
     "housing": (
         "Housing and tenancy",
         "Fair Housing Act",
-        "https://www.govinfo.gov/content/pkg/USCODE-2023-title42/html/USCODE-2023-title42-chap45-subchapI.htm",
+        "https://uscode.house.gov/view.xhtml?path=/prelim@title42/chapter45/subchapterI&edition=prelim",
     ),
     "discrimination": (
         "Workplace discrimination",
         "Civil Rights Act Title VII",
-        "https://www.govinfo.gov/content/pkg/USCODE-2023-title42/html/USCODE-2023-title42-chap21-subchapVI.htm",
+        "https://uscode.house.gov/view.xhtml?path=/prelim@title42/chapter21/subchapterVI&edition=prelim",
     ),
     "rights": (
         "Legal complaints",
