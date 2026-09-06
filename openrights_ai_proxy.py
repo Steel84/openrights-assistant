@@ -9,7 +9,7 @@ HOST, PORT = '127.0.0.1', 8104
 GEMINI_KEY = os.environ.get('GEMINI_API_KEY', '')
 GEMINI_MODEL = os.environ.get('GEMINI_MODEL', 'gemini-3.6-flash')
 MISTRAL_KEYS = list(dict.fromkeys(k.strip() for k in os.environ.get('MISTRAL_API_KEYS', '').split(',') if k.strip()))
-MODEL = os.environ.get('MISTRAL_MODEL', 'mistral-small-latest')
+MODEL = os.environ.get('MISTRAL_MODEL', 'ministral-8b-latest')
 COOLDOWN = {}
 LOCK = threading.Lock()
 
