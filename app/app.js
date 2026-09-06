@@ -188,7 +188,7 @@ function showResults(question) {
   }
   // Sources must be rendered even when AI is disabled or fails.
   if (passages.length) {
-    const details=document.createElement('details'); details.className='sources'; details.open=!answer;
+    const details=document.createElement('details'); details.className='sources'; details.open=false;
     const summary=document.createElement('summary'); summary.textContent=`${passages.length} supporting passage${passages.length===1?'':'s'} from the law`;
     details.appendChild(summary);
     passages.forEach((hit,index)=>details.appendChild(passageCard(hit,index+1,question)));
