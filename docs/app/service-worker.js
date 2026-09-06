@@ -3,10 +3,10 @@ const ASSETS = [
   './',
   './index.html',
   './styles.css',
-  './app.js',
-  './data/index.js',
+  './app.js?v=29',
+  './data/index.js?v=2',
   './manifest.webmanifest',
-  './config.js',
+  './config.js?v=2',
 ];
 
 self.addEventListener('install', (event) => {

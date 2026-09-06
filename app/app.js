@@ -179,7 +179,10 @@ async function geminiSummary(question, passages, requestId) {
       });
       // If rate-limited or server error, try next provider
       if (resp.status === 429 || resp.status === 503) continue;
-      if (!resp.ok) continue;
+      if (!resp.ok) {
+        console.warn(`AI provider ${provider.name} returned HTTP ${resp.status}`);
+        continue;
+      }
       const data = await resp.json();
       const text = provider.parseResponse(data);
       if (text) return text;
