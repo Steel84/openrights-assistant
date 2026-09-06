@@ -11,7 +11,6 @@ GEMINI_MODEL = os.environ.get('GEMINI_MODEL', 'gemini-3.6-flash')
 MISTRAL_KEYS = list(dict.fromkeys(k.strip() for k in os.environ.get('MISTRAL_API_KEYS', '').split(',') if k.strip()))
 MODEL = os.environ.get('MISTRAL_MODEL', 'ministral-8b-latest')
 COOLDOWN = {}
-LOCK = threading.Lock()
 
 def retry_seconds(headers):
     value = next((v for k,v in headers.items() if k.lower() == 'retry-after'), None)
@@ -124,10 +123,10 @@ class Handler(BaseHTTPRequestHandler):
             prompt = body.get('prompt') if isinstance(body,dict) else None
         except Exception: self.send_json(400,{'message':'Invalid JSON.'}); return
         if not isinstance(prompt,str) or not prompt.strip() or len(prompt)>30000: self.send_json(400,{'message':'Invalid prompt.'}); return
-        if not LOCK.acquire(blocking=False): self.send_json(503,{'message':'AI is processing another request. Local search remains available.','retry_after':2}); return
+        # Requests may overlap: the browser aborts stale generations after a fast tag click.
+        # Do not reject the new request just because an older upstream call is still finishing.
         try: status,payload = generate(prompt)
-        except Exception: status,payload = 502,{'message':'AI response could not be processed. Local search remains available.'}
-        finally: LOCK.release()
+        except Exception: status,payload = 502,{'message':'The AI service is temporarily unavailable. Please try again shortly. Your search results and legal sources are still available.'}
         self.send_json(status,payload)
 
 if __name__ == '__main__':
