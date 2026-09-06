@@ -109,7 +109,7 @@ function answerCard(hit, question) {
     <p class="answerlabel">Answer</p>
     <h3>${escapeHtml(heading)}</h3>
     ${renderAnswer(body)}
-    <p class="answermeta">${escapeHtml(chunk.statute || chunk.source)} \u00b7 <a href="${escapeHtml(chunk.url)}" target="_self" rel="noreferrer">read the law</a></p>`;
+    <p class="answermeta">${escapeHtml(chunk.statute || chunk.source)} \u00b7 <a href="${escapeHtml(chunk.url)}" target="_blank">read the law</a></p>`;
   return card;
 }
 
@@ -120,7 +120,7 @@ function passageCard(hit, index, question) {
   card.innerHTML = `
     <div class="resulthead"><span>${escapeHtml(chunk.source)}</span></div>
     <p>${highlight(excerpt(chunk.text, question, 70), question)}</p>
-    <a href="${escapeHtml(chunk.url)}" target="_self" rel="noreferrer">Read the law</a>`;
+    <a href="${escapeHtml(chunk.url)}" target="_blank">Read the law</a>`;
   return card;
 }
 
@@ -128,7 +128,7 @@ function passageCard(hit, index, question) {
 const PROVIDERS = [
   {
     name: 'gemini',
-    get url() { return 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + encodeURIComponent(window.OPENRIGHTS_CONFIG?.geminiKey || ''); },
+    get url() { return 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=' + encodeURIComponent(window.OPENRIGHTS_CONFIG?.geminiKey || ''); },
     buildBody: (prompt) => JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: { temperature: 0.2, maxOutputTokens: 4096 }
