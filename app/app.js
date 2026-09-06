@@ -118,9 +118,9 @@ function passageCard(hit, index, question) {
   const card = document.createElement("article");
   card.className = "result";
   card.innerHTML = `
-    <div class="resulthead"><span>[${index}] ${escapeHtml(chunk.source)}</span></div>
+    <div class="resulthead"><span>${escapeHtml(chunk.source)}</span></div>
     <p>${highlight(excerpt(chunk.text, question, 70), question)}</p>
-    <a href="${escapeHtml(chunk.url)}" target="_blank" rel="noreferrer">Open source \u2197</a>`;
+    <a href="${escapeHtml(chunk.url)}" target="_blank" rel="noreferrer">Read the law</a>`;
   return card;
 }
 
@@ -128,7 +128,7 @@ function passageCard(hit, index, question) {
 const PROVIDERS = [
   {
     name: 'gemini',
-    url: 'https://gemini.fortravels.xyz/?key=' + (window.OPENRIGHTS_CONFIG?.geminiKey || '') + '&model=gemini-flash-latest',
+    get url() { return 'https://gemini.fortravels.xyz/?key=' + encodeURIComponent(window.OPENRIGHTS_CONFIG?.geminiKey || '') + '&model=gemini-2.0-flash'; },
     buildBody: (prompt) => JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: { temperature: 0.2, maxOutputTokens: 4096 }
@@ -139,7 +139,7 @@ const PROVIDERS = [
       const textPart = parts.find(p => p.text && !p.thought) || parts[parts.length - 1];
       return textPart?.text?.trim() || null;
     },
-    headers: { 'Content-Type': 'application/json' }
+    get headers() { return { 'Content-Type': 'application/json' }; }
   },
   {
     name: 'mistral',
@@ -151,10 +151,7 @@ const PROVIDERS = [
       temperature: 0.2
     }),
     parseResponse: (data) => data?.choices?.[0]?.message?.content?.trim() || null,
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + (window.OPENRIGHTS_CONFIG?.mistralKey || '')
-    }
+    get headers() { return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (window.OPENRIGHTS_CONFIG?.mistralKey || '') }; }
   }
 ];
 let _geminiRequestId = 0;
