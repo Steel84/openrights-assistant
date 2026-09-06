@@ -170,14 +170,18 @@ function showResults(question) {
   if (summaryController) summaryController.abort();
   container.replaceChildren();
   if (!question) { container.innerHTML='<div class="empty">Type a question to search the local archive.</div>'; return; }
-  const hits = search(question,40).filter(hit=>hit.score>0);
-  if (!hits.length) {container.innerHTML='<div class="empty">Nothing in this archive matches that. Try different words.</div>'; return;}
-  const answer=hits.find(hit=>hit.chunk.kind==='plain' && hit.score>=ANSWER_FLOOR && onSubject(question,hit.chunk.text,state.idf));
-  const passages=hits.filter(hit=>hit.chunk.kind!=='plain' && onSubject(question,hit.chunk.text,state.idf,EVIDENCE_TERMS)).slice(0,4);
+  const allHits = search(question, state.chunks.length).filter(hit => hit.score > 0);
+  if (!allHits.length) {container.innerHTML='<div class=\'empty\'>Nothing in this archive matches that. Try different words.</div>'; return;}
+  const hits = allHits.slice(0,40);
+  const strictAnswer = allHits.find(hit => hit.chunk.kind === 'plain' && hit.score >= ANSWER_FLOOR && onSubject(question, hit.chunk.text, state.idf));
+  // Search plain-language answers across the entire local archive, independent of evidence passages.
+  const fallbackAnswer = allHits.find(hit => hit.chunk.kind === 'plain');
+  const answer = strictAnswer || fallbackAnswer;
+  const passages = hits.filter(hit => hit.chunk.kind !== 'plain' && onSubject(question, hit.chunk.text, state.idf, EVIDENCE_TERMS)).slice(0,4);
   if (answer) container.appendChild(answerCard(answer,question));
   else {
     const notice=document.createElement('div'); notice.className='empty';
-    notice.textContent=passages.length ? 'No plain-language answer covers this yet. Here is the closest text in the law.' : 'This archive does not cover that topic yet.';
+    notice.textContent='This archive does not cover that topic yet.';
     container.appendChild(notice);
   }
   let aiCard;
