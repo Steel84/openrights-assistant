@@ -25,7 +25,7 @@ def retry_seconds(headers):
         return max(1, math.ceil((when - datetime.now(timezone.utc)).total_seconds()))
     except (TypeError, ValueError, OverflowError): return 30
 
-def call(url, headers, body, timeout=4):
+def call(url, headers, body, timeout=12):
     request = urllib.request.Request(url, data=json.dumps(body).encode(), headers=headers, method='POST')
     try:
         with urllib.request.urlopen(request, timeout=timeout) as response:
@@ -54,7 +54,7 @@ def failure(provider, status, data, retry=None):
 
 def generate(prompt):
     attempts = []
-    deadline = time.monotonic() + 24
+    deadline = time.monotonic() + 50
     routes = []
     if GEMINI_KEY:
         routes.append(('Gemini', 'https://generativelanguage.googleapis.com/v1beta/models/'+GEMINI_MODEL+':generateContent', {'Content-Type':'application/json','x-goog-api-key':GEMINI_KEY}, {'contents':[{'parts':[{'text':prompt}]}], 'generationConfig':{'maxOutputTokens':1024}}))
@@ -74,7 +74,7 @@ def generate(prompt):
                     parts = data['candidates'][0]['content']['parts']
                     text = '\n'.join(p['text'] for p in parts if p.get('text') and not p.get('thought'))
                 else: text = data['choices'][0]['message']['content']
-                if isinstance(text,str) and text.strip(): return 200, {'text':text.strip(),'provider':name.split(' key')[0]}
+                if isinstance(text,str) and text.strip(): return 200, {'text':text.strip()}
             except (KeyError,IndexError,TypeError): pass
             attempts.append({'provider':name,'status':502,'reason':'empty_or_invalid_response'}); continue
         retry = retry_seconds(response_headers) if status == 429 else None
@@ -87,12 +87,13 @@ def generate(prompt):
         'model_or_endpoint_not_found':'model or endpoint not found', 'rate_limited':'rate-limited',
         'upstream_unavailable':'upstream unavailable', 'invalid_response':'invalid response',
         'empty_or_invalid_response':'empty or invalid response', 'request_deadline_exceeded':'not attempted: request deadline reached'}
-    message = '; '.join(f"{a['provider']}: {labels[a['reason']]} ({a['status']})" for a in attempts)
     retries = [a['retry_after'] for a in attempts if 'retry_after' in a]
-    result = {'message':message+'. Local search and legal sources remain available.', 'attempts':attempts}
+    # Keep provider names, key indexes, status codes and retry details server-side.
+    # The browser gets one neutral message only.
+    result = {'message':'The AI service is temporarily unavailable. Please try again shortly. Your search results and legal sources are still available.'}
     if retries: result['retry_after'] = min(retries)
     statuses = {a['status'] for a in attempts}
-    status = next(iter(statuses)) if len(statuses)==1 and next(iter(statuses)) in (400,401,403,404,429) else 503
+    status = 429 if statuses and statuses <= {429} else 503
     return status,result
 
 class Handler(BaseHTTPRequestHandler):
