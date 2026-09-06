@@ -128,7 +128,7 @@ function passageCard(hit, index, question) {
 const PROVIDERS = [
   {
     name: 'gemini',
-    get url() { return 'https://gemini.fortravels.xyz/?key=' + encodeURIComponent(window.OPENRIGHTS_CONFIG?.geminiKey || '') + '&model=gemini-2.0-flash'; },
+    get url() { return 'https://gemini.fortravels.xyz/?key=' + encodeURIComponent(window.OPENRIGHTS_CONFIG?.geminiKey || '') + '&model=gemini-flash-latest'; },
     buildBody: (prompt) => JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: { temperature: 0.2, maxOutputTokens: 4096 }
