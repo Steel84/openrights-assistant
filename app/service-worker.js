@@ -1,12 +1,12 @@
-const CACHE_NAME = 'openrights-v16';
+const CACHE_NAME = 'openrights-v17';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
-  './app.js?v=29',
-  './data/index.js?v=2',
+  './app.js?v=30',
+  './data/index.js?v=3',
   './manifest.webmanifest',
-  './config.js?v=2',
+  './config.js?v=3',
 ];
 
 self.addEventListener('install', (event) => {
