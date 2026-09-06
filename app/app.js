@@ -93,121 +93,7 @@ function excerpt(text, question, size) {
   return `${start > 0 ? "\u2026 " : ""}${slice}${start + size < tokens.length ? " \u2026" : ""}`;
 }
 
-function splitHeading(text) {
-  const [heading, ...rest] = text.split(/\n\s*\n/);
-  return { heading: heading.trim(), body: rest.join("\n\n").trim() };
-}
 
-function attachSourceLink(card, url) {
-  const link = card.querySelector(".source-link");
-  if (!link) return;
-  link.href = url;
-  link.addEventListener("click", (event) => {
-    event.preventDefault();
-    window.location.href = url;
-  });
-}
-
-function answerCard(hit, question) {
-  const { chunk } = hit;
-  const parsed = splitHeading(chunk.text);
-  const heading = chunk.heading || parsed.heading;
-  const body = chunk.body || parsed.body;
-  const card = document.createElement("article");
-  card.className = "answer";
-  card.innerHTML = `
-    <p class="answerlabel">Answer</p>
-    <h3>${escapeHtml(heading)}</h3>
-    ${renderAnswer(body)}
-    <p class="answermeta">${escapeHtml(chunk.statute || chunk.source)} \u00b7 <a class="source-link" href="#">read the law</a></p>`;
-  attachSourceLink(card, chunk.url);
-  return card;
-}
-
-function passageCard(hit, index, question) {
-  const { chunk } = hit;
-  const card = document.createElement("article");
-  card.className = "result";
-  card.innerHTML = `
-    <div class="resulthead"><span>${escapeHtml(chunk.source)}</span></div>
-    <p>${highlight(excerpt(chunk.text, question, 70), question)}</p>
-    <a class="source-link" href="#">Read the law</a>`;
-  attachSourceLink(card, chunk.url);
-  return card;
-}
-
-// --- AI Summary (Gemini + Mistral fallback) ---
-const PROVIDERS = [
-  {
-    name: 'gemini',
-    get url() { return 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=' + encodeURIComponent(window.OPENRIGHTS_CONFIG?.geminiKey || ''); },
-    buildBody: (prompt) => JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.2, maxOutputTokens: 4096 }
-    }),
-    parseResponse: (data) => {
-      const parts = data?.candidates?.[0]?.content?.parts;
-      if (!parts || !parts.length) return null;
-      const textPart = parts.find(p => p.text && !p.thought) || parts[parts.length - 1];
-      return textPart?.text?.trim() || null;
-    },
-    get headers() { return { 'Content-Type': 'application/json' }; }
-  },
-  {
-    name: 'mistral',
-    url: 'https://api.mistral.ai/v1/chat/completions',
-    buildBody: (prompt) => JSON.stringify({
-      model: 'mistral-small-latest',
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: 1024,
-      temperature: 0.2
-    }),
-    parseResponse: (data) => data?.choices?.[0]?.message?.content?.trim() || null,
-    get headers() { return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (window.OPENRIGHTS_CONFIG?.mistralKey || '') }; }
-  }
-];
-let _geminiRequestId = 0;
-let _geminiAbort = null;
-
-async function geminiSummary(question, passages, requestId) {
-  const sources = passages.map((p, i) =>
-    `[${i+1}] ${p.chunk.source}\n${(p.chunk.body || p.chunk.text).slice(0, 600)}\nURL: ${p.chunk.url}`
-  ).join('\n\n');
-
-  const prompt = `You are a helpful legal information assistant. Synthesize the passages below into a clear, detailed answer to the question. Include specific rules, numbers, deadlines, thresholds, and exceptions when present. Do not use citation numbers like [1] or [2]. Write 100-200 words. Plain English. This is information, not legal advice.\n\nQuestion: ${question}\n\nPassages:\n${sources}\n\nAnswer:`;
-
-  if (_geminiAbort) _geminiAbort.abort();
-  _geminiAbort = new AbortController();
-
-  // Try each provider in order (Gemini first, Mistral as fallback)
-  for (const provider of PROVIDERS) {
-    if (requestId !== _geminiRequestId) return null;
-    try {
-      const resp = await fetch(provider.url, {
-        signal: _geminiAbort.signal,
-        method: 'POST',
-        headers: provider.headers,
-        body: provider.buildBody(prompt)
-      });
-      // If rate-limited or server error, try next provider
-      if (resp.status === 429 || resp.status === 503) continue;
-      if (!resp.ok) {
-        console.warn(`AI provider ${provider.name} returned HTTP ${resp.status}`);
-        continue;
-      }
-      const data = await resp.json();
-      const text = provider.parseResponse(data);
-      if (text) return text;
-      // Empty response, try next
-      continue;
-    } catch (e) {
-      if (e.name === 'AbortError') return null;
-      // Network error, try next provider
-      continue;
-    }
-  }
-  return null;
-}
 // --- End AI Summary ---
 
 function showResults(question) {
@@ -251,17 +137,6 @@ function showResults(question) {
     return;
   }
 
-  if (passages.length) {
-    const details = document.createElement("details");
-    details.className = "sources";
-    if (!answer) details.open = true;
-    const summary = document.createElement("summary");
-    summary.textContent = `${passages.length} supporting passage${passages.length === 1 ? "" : "s"} from the law`;
-    details.appendChild(summary);
-    passages.forEach((hit, index) => details.appendChild(passageCard(hit, index + 1, question)));
-    container.appendChild(details);
-  }
-
   // AI Summary (if toggle is on)
   const aiToggle = document.getElementById('aiToggle');
   if (!aiToggle || !aiToggle.checked) return;
@@ -274,6 +149,17 @@ function showResults(question) {
   aiDetails.open = true;
   aiDetails.innerHTML = '<summary class="ai-label">AI Summary</summary><p class="ai-loading">Generating...</p>';
   container.appendChild(aiDetails);
+
+  if (passages.length) {
+    const details = document.createElement("details");
+    details.className = "sources";
+    if (!answer) details.open = true;
+    const summary = document.createElement("summary");
+    summary.textContent = `${passages.length} supporting passage${passages.length === 1 ? "" : "s"} from the law`;
+    details.appendChild(summary);
+    passages.forEach((hit, index) => details.appendChild(passageCard(hit, index + 1, question)));
+    container.appendChild(details);
+  }
 
   // Hard timeout: if no response in 15s, remove loader silently
   const hardTimeout = setTimeout(() => {
@@ -301,13 +187,13 @@ function showResults(question) {
       aiDetails.appendChild(meta);
     } else {
       // Show brief error instead of silent removal
-      if (loader) loader.textContent = 'AI temporarily unavailable. Try again later.';
+      if (loader) loader.textContent = e?.message || 'AI unavailable. The legal sources are still available below.';
     }
-  }).catch(() => {
+  }).catch((error) => {
     clearTimeout(hardTimeout);
     if (!aiDetails.parentNode) return;
     const loader = aiDetails.querySelector('.ai-loading');
-    if (loader) loader.textContent = 'AI temporarily unavailable. Try again later.';
+    if (loader) loader.textContent = error?.message || 'AI unavailable. The legal sources are still available below.';
   });
 }
 
