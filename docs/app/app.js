@@ -98,6 +98,16 @@ function splitHeading(text) {
   return { heading: heading.trim(), body: rest.join("\n\n").trim() };
 }
 
+function attachSourceLink(card, url) {
+  const link = card.querySelector(".source-link");
+  if (!link) return;
+  link.href = url;
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    window.location.href = url;
+  });
+}
+
 function answerCard(hit, question) {
   const { chunk } = hit;
   const parsed = splitHeading(chunk.text);
@@ -109,7 +119,8 @@ function answerCard(hit, question) {
     <p class="answerlabel">Answer</p>
     <h3>${escapeHtml(heading)}</h3>
     ${renderAnswer(body)}
-    <p class="answermeta">${escapeHtml(chunk.statute || chunk.source)} \u00b7 <a href="${escapeHtml(chunk.url)}" target="_blank">read the law</a></p>`;
+    <p class="answermeta">${escapeHtml(chunk.statute || chunk.source)} \u00b7 <a class="source-link" href="#">read the law</a></p>`;
+  attachSourceLink(card, chunk.url);
   return card;
 }
 
@@ -120,7 +131,8 @@ function passageCard(hit, index, question) {
   card.innerHTML = `
     <div class="resulthead"><span>${escapeHtml(chunk.source)}</span></div>
     <p>${highlight(excerpt(chunk.text, question, 70), question)}</p>
-    <a href="${escapeHtml(chunk.url)}" target="_blank">Read the law</a>`;
+    <a class="source-link" href="#">Read the law</a>`;
+  attachSourceLink(card, chunk.url);
   return card;
 }
 
