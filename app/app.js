@@ -108,22 +108,20 @@ function attachSourceLink(card, url) {
   });
 }
 
-function answerCard(hit, question) {
+function answerCard(hit, question, passageFallback = false) {
   const { chunk } = hit;
   const parsed = splitHeading(chunk.text);
-  const heading = chunk.heading || parsed.heading;
-  const body = chunk.body || parsed.body;
+  const body = passageFallback ? excerpt(chunk.text, question, 120) : (chunk.body || parsed.body);
   const card = document.createElement("article");
   card.className = "answer";
   card.innerHTML = `
     <p class="answerlabel">Answer</p>
-    <h3>${escapeHtml(heading)}</h3>
+    <h3>${escapeHtml(question)}</h3>
     ${renderAnswer(body)}
-    <p class="answermeta">${escapeHtml(chunk.statute || chunk.source)} \u00b7 <a class="source-link" href="#">read the law</a></p>`;
+    <p class="answermeta">${escapeHtml(chunk.statute || chunk.source)} · <a class="source-link" href="#">read the law</a></p>`;
   attachSourceLink(card, chunk.url);
   return card;
 }
-
 function passageCard(hit, index, question) {
   const { chunk } = hit;
   const card = document.createElement("article");
@@ -171,17 +169,15 @@ function showResults(question) {
   container.replaceChildren();
   if (!question) { container.innerHTML='<div class="empty">Type a question to search the local archive.</div>'; return; }
   const allHits = search(question, state.chunks.length).filter(hit => hit.score > 0);
-  if (!allHits.length) {container.innerHTML='<div class=\'empty\'>Nothing in this archive matches that. Try different words.</div>'; return;}
-  const hits = allHits.slice(0,40);
-  const strictAnswer = allHits.find(hit => hit.chunk.kind === 'plain' && hit.score >= ANSWER_FLOOR && onSubject(question, hit.chunk.text, state.idf));
-  // Search plain-language answers across the entire local archive, independent of evidence passages.
-  const fallbackAnswer = allHits.find(hit => hit.chunk.kind === 'plain');
-  const answer = strictAnswer || fallbackAnswer;
-  const passages = hits.filter(hit => hit.chunk.kind !== 'plain' && onSubject(question, hit.chunk.text, state.idf, EVIDENCE_TERMS)).slice(0,4);
-  if (answer) container.appendChild(answerCard(answer,question));
+  if (!allHits.length) { container.innerHTML = '<div class="empty">Nothing in this archive matches that. Try different words.</div>'; return; }
+  const hits = allHits.slice(0, 40);
+  const strictAnswer = allHits.find(hit => hit.chunk.kind === "plain" && hit.score >= ANSWER_FLOOR && onSubject(question, hit.chunk.text, state.idf));
+  const passages = hits.filter(hit => hit.chunk.kind !== "plain" && onSubject(question, hit.chunk.text, state.idf, EVIDENCE_TERMS)).slice(0, 4);
+  if (strictAnswer) container.appendChild(answerCard(strictAnswer, question));
+  else if (passages.length) container.appendChild(answerCard(passages[0], question, true));
   else {
-    const notice=document.createElement('div'); notice.className='empty';
-    notice.textContent='This archive does not cover that topic yet.';
+    const notice = document.createElement("div"); notice.className = "empty";
+    notice.textContent = "This archive does not cover that topic yet.";
     container.appendChild(notice);
   }
   let aiCard;

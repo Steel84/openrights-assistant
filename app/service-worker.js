@@ -1,5 +1,5 @@
-const CACHE_NAME = 'openrights-v26';
-const ASSETS = ['./','./index.html','./styles.css?v=21','./app.js?v=39','./data/index.js?v=6','./manifest.webmanifest'];
+const CACHE_NAME = 'openrights-v27';
+const ASSETS = ['./','./index.html','./styles.css?v=21','./app.js?v=40','./data/index.js?v=6','./manifest.webmanifest'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(ASSETS.map(url=>new Request(url,{cache:'reload'})))).then(()=>self.skipWaiting()));
 });
